@@ -15,7 +15,7 @@ export default defineConfig({
       sidebar: [
         {
           label: "Specifications",
-          autogenerate: { directory: "web-apis" },
+          autogenerate: { directory: "js" },
         },
       ],
     }),
