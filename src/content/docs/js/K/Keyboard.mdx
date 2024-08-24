@@ -9,7 +9,7 @@ actions:
       target: _blank
 ---
 
-import { LinkButton } from '@astrojs/starlight/components';
+import { LinkButton } from "@astrojs/starlight/components";
 
 ```js
 // Keyboard.js
@@ -22,7 +22,8 @@ for (const [key, value] of layoutMap.entries()) {
 }
 ```
 
-<iframe srcdoc='
+<iframe
+  srcdoc='
 <style>
   * {
     margin: 0;
@@ -53,6 +54,12 @@ for (const [key, value] of layoutMap.entries()) {
   li:first-of-type {
     border-top: 1px solid #3A3A3A;
   }
+  li:nth-child(odd) {
+    background: #0A0A0A;
+  }
+  li:hover {
+    background: #111;
+  }
 </style>
 <h1>Console</h1>
 <ul id="list"></ul>
@@ -69,8 +76,14 @@ for (const [key, value] of layoutMap.entries()) {
     }
   })();
 </script>
-'></iframe>
+'
+></iframe>
 
-<LinkButton href="https://developer.mozilla.org/en-US/docs/Web/API/Keyboard_API" variant="secondary" icon="external" target="_blank">
+<LinkButton
+  href="https://developer.mozilla.org/en-US/docs/Web/API/Keyboard_API"
+  variant="secondary"
+  icon="external"
+  target="_blank"
+>
   Keyboard API - Web APIs | MDN
 </LinkButton>
