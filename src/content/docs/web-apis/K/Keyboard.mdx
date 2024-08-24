@@ -1,0 +1,76 @@
+---
+title: Keyboard
+description: The Keyboard API provides methods for working with a physical keyboard that is attached to a device running a browser.
+actions:
+  - text: Read the Starlight docs
+    link: https://starlight.astro.build
+    icon: external
+    attrs:
+      target: _blank
+---
+
+import { LinkButton } from '@astrojs/starlight/components';
+
+```js
+// Keyboard.js
+const layoutMap = await navigator.keyboard.getLayoutMap();
+
+console.log(`layoutMap.size: ${layoutMap.size}`);
+
+for (const [key, value] of layoutMap.entries()) {
+  console.log(`${key}: ${value}`);
+}
+```
+
+<iframe srcdoc='
+<style>
+  * {
+    margin: 0;
+    padding: 0;
+  }
+  body {
+    background: #000;
+    margin: 0;
+    padding: 1rem;
+    font-family: monospace;
+    font-size: 1rem;
+    color: #FFF;
+  }
+  h1 {
+    margin-bottom: 1rem;
+    font-family: system-ui;
+  }
+  ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    white-space: pre-wrap;
+  }
+  li {
+    border-bottom: 1px solid #3A3A3A;
+    padding: 0.5rem 0.75rem;
+  }
+  li:first-of-type {
+    border-top: 1px solid #3A3A3A;
+  }
+</style>
+<h1>Console</h1>
+<ul id="list"></ul>
+<script>
+  (async () => {
+    const layoutMap = await navigator.keyboard.getLayoutMap();
+    const li = document.createElement("li");
+    li.textContent = `layoutMap.size: ${layoutMap.size}`;
+    list.appendChild(li);
+    for (const [key, value] of layoutMap.entries()) {
+      const li = document.createElement("li");
+      li.textContent = `${key}: ${value}`;
+      list.appendChild(li);
+    }
+  })();
+</script>
+'></iframe>
+
+<LinkButton href="https://developer.mozilla.org/en-US/docs/Web/API/Keyboard_API" variant="secondary" icon="external" target="_blank">
+  Keyboard API - Web APIs | MDN
+</LinkButton>
