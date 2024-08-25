@@ -9,10 +9,29 @@ actions:
       target: _blank
 ---
 
-import { LinkButton } from "@astrojs/starlight/components";
+import { LinkButton, LinkCard } from "@astrojs/starlight/components";
+import Console from './src/components/Console.astro';
+
+The Keyboard API provides methods for working with a physical keyboard that is attached to a device running a browser.
+
+<LinkCard
+  title="Keyboard API - Web APIs | MDN"
+  href="https://developer.mozilla.org/en-US/docs/Web/API/Keyboard_API"
+  target="_blank"
+/>
+
+## Instance methods
+
+### getLayoutMap()
+
+<LinkCard
+  title="Keyboard: getLayoutMap() method | MDN"
+  href="https://developer.mozilla.org/en-US/docs/Web/API/Keyboard/getLayoutMap"
+  target="_blank"
+/>
 
 ```js
-// Keyboard.js
+// getLayoutMap.js
 const layoutMap = await navigator.keyboard.getLayoutMap();
 
 console.log(`layoutMap.size: ${layoutMap.size}`);
@@ -22,72 +41,34 @@ for (const [key, value] of layoutMap.entries()) {
 }
 ```
 
-<iframe
-  allow="keyboard-map"
-  srcdoc='
-<style>
-  * {
-    margin: 0;
-    padding: 0;
-  }
-  body {
-    background: #000;
-    margin: 0;
-    padding: 1rem;
-    font-family: monospace;
-    font-size: 1rem;
-    color: #FFF;
-  }
-  h1 {
-    margin-bottom: 1rem;
-    font-family: system-ui;
-  }
-  ul {
-    margin: 0;
-    padding: 0;
-    list-style: none;
-    white-space: pre-wrap;
-  }
-  li {
-    border-bottom: 1px solid #3A3A3A;
-    padding: 0.5rem 0.75rem;
-  }
-  li:first-of-type {
-    border-top: 1px solid #3A3A3A;
-  }
-  li:nth-child(odd) {
-    background: #0A0A0A;
-  }
-  li:hover {
-    background: #111;
-  }
-</style>
-<h1>Console</h1>
-<ul id="list"></ul>
-<script>
-  (async () => {
-    const layoutMap = await navigator.keyboard.getLayoutMap();
-    const li = document.createElement("li");
-    li.textContent = `layoutMap.size: ${layoutMap.size}`;
-    list.appendChild(li);
-    for (const [key, value] of layoutMap.entries()) {
-      const li = document.createElement("li");
-      li.textContent = `${key}: ${value}`;
-      list.appendChild(li);
-    }
-  })();
-</script>
-'
-></iframe>
+<Console script='
+  const layoutMap = await navigator.keyboard.getLayoutMap();
 
-<LinkButton
-  href="https://developer.mozilla.org/en-US/docs/Web/API/Keyboard_API"
-  variant="secondary"
-  icon="external"
+  console.log(`layoutMap.size: ${layoutMap.size}`);
+
+  for (const [key, value] of layoutMap.entries()) {
+    console.log(`${key}: ${value}`);
+  }
+' />
+
+### lock()
+
+<LinkCard
+  title="Keyboard: lock() method | MDN"
+  href="https://developer.mozilla.org/en-US/docs/Web/API/Keyboard/lock"
   target="_blank"
->
-  Keyboard API - Web APIs | MDN
-</LinkButton>
+/>
+
+```js
+// lock.js
+await navigator.keyboard.lock(["KeyW", "KeyA", "KeyS", "KeyD"]);
+console.log("Keypresses are being captured for the WASD keys.");
+```
+
+<Console script='
+  await navigator.keyboard.lock(["KeyW", "KeyA", "KeyS", "KeyD"]);
+  console.log("Keypresses are being captured for the WASD keys.");
+' />
 
 ## Further reading
 

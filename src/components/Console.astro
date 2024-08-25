@@ -1,0 +1,7 @@
+---
+import { CodeExecutor } from "./CodeExecutor";
+
+const { script } = Astro.props;
+---
+
+<CodeExecutor script={script} client:load />

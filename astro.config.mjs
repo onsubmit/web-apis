@@ -1,6 +1,8 @@
 import starlight from "@astrojs/starlight";
 import { defineConfig } from "astro/config";
 
+import react from "@astrojs/react";
+
 // https://astro.build/config
 export default defineConfig({
   site: "https://onsubmit.github.io",
@@ -15,9 +17,12 @@ export default defineConfig({
       sidebar: [
         {
           label: "Specifications",
-          autogenerate: { directory: "js" },
+          autogenerate: {
+            directory: "js",
+          },
         },
       ],
     }),
+    react(),
   ],
 });
