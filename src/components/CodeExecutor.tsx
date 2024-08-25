@@ -25,10 +25,11 @@ function CodeExecutor({ script }: CodeExecutorProps) {
 function replaceConsoleLogs(script: string, listId: string) {
   return (
     `const list = document.getElementById('${listId}');\n` +
+    `let li = null;\n` +
     script.replaceAll(
       /console.log\((?<LOG>.+?)\);/g,
       `
-const li = document.createElement("li");
+li = document.createElement("li");
 li.textContent = $<LOG>;
 list.appendChild(li);
 `

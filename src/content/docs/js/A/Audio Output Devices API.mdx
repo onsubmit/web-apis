@@ -1,0 +1,81 @@
+---
+title: Audio Output Devices API
+---
+
+import { LinkCard } from "@astrojs/starlight/components";
+import Console from '@components/Console.astro';
+
+The Audio Output Devices API allows web applications to prompt users about what output device should be used for audio playback.
+
+<LinkCard
+  title="Audio Output Devices API - Web APIs | MDN"
+  href="https://developer.mozilla.org/en-US/docs/Web/API/Audio_Output_Devices_API"
+  target="_blank"
+/>
+
+## Methods
+
+### MediaDevices.selectAudioOutput()
+
+<LinkCard
+  title="MediaDevices: selectAudioOutput() method | MDN"
+  href="https://developer.mozilla.org/en-US/docs/Web/API/MediaDevices/selectAudioOutput"
+  target="_blank"
+/>
+
+```js
+// audioOutputApi.js
+const audio = document.createElement("audio");
+const currentSink = audio.sinkId || "default user agent device";
+console.log(`Current audio device id: ${currentSink}`);
+
+console.log("Prompting user for device selection...");
+const device = await navigator.mediaDevices.selectAudioOutput();
+console.log(`Device selected: ${JSON.stringify(device, null, 2)}`);
+
+await audio.setSinkId(device.deviceId);
+console.log(`New audio device id: ${audio.sinkId}`);
+
+console.log("Playing the audio from the selected output device...");
+audio.src = "//samplelib.com/lib/preview/mp3/sample-3s.mp3";
+audio.play();
+```
+
+<Console script='
+  const audio = document.createElement("audio");
+  const currentSink = audio.sinkId || "default user agent device";
+  console.log(`Current audio device id: ${currentSink}`);
+
+  console.log("Prompting user for device selection...");
+  const device = await navigator.mediaDevices.selectAudioOutput();
+  console.log(`Device selected: ${JSON.stringify(device, null, 2)}`);
+
+  await audio.setSinkId(device.deviceId);
+  console.log(`New audio device id: ${audio.sinkId}`);
+
+  console.log("Playing the audio from the selected output device...");
+  audio.src = "//samplelib.com/lib/preview/mp3/sample-3s.mp3";
+  audio.play();
+' />
+
+### HTMLMediaElement.setSinkId()
+
+<LinkCard
+  title="HTMLMediaElement: setSinkId() method | MDN"
+  href="https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement/setSinkId"
+  target="_blank"
+/>
+
+See [MediaDevices.selectAudioOutput()](#mediadevicesselectaudiooutput).
+
+## Properties
+
+### HTMLMediaElement.sinkId
+
+<LinkCard
+  title="HTMLMediaElement: sinkId property | MDN"
+  href="https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement/sinkId"
+  target="_blank"
+/>
+
+See [MediaDevices.selectAudioOutput()](#mediadevicesselectaudiooutput).
