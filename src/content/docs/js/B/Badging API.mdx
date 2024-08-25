@@ -1,0 +1,50 @@
+---
+title: Badging API
+---
+
+import { LinkCard } from "@astrojs/starlight/components";
+import Console from '@components/Console.astro';
+
+The Badging API gives web developers a method of setting a badge on a document or application, to act as a notification that state has changed without displaying a more distracting notification. A common use case for this would be an application with a messaging feature displaying a badge on the app icon to show that new messages have arrived.
+
+In a desktop browser, to see the results of the Badging API, you'll need to pin this web app to your taskbar or dock. In Edge/Chrome, you can do this from the `...` > More Tools menu.
+
+<LinkCard
+  title="Badging API - Web APIs | MDN"
+  href="https://developer.mozilla.org/en-US/docs/Web/API/Badging_API"
+  target="_blank"
+/>
+
+## Methods
+
+### Navigator.setAppBadge()
+
+```js
+// setAppBadge.js
+const notifications = 42;
+await navigator.setAppBadge(notifications);
+
+console.log(`Badge contents set to ${notifications}`);
+```
+
+<Console script='
+const notifications = 42;
+await navigator.setAppBadge(notifications);
+
+console.log(`Badge contents set to ${notifications}`);
+' />
+
+### Navigator.clearAppBadge()
+
+```js
+// clearAppBadge.js
+await navigator.clearAppBadge();
+
+console.log("Badge contents cleared");
+```
+
+<Console script='
+await navigator.clearAppBadge();
+
+console.log("Badge contents cleared");
+' />
