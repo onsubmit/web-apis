@@ -13,6 +13,9 @@ export default defineConfig({
       social: {
         github: "https://github.com/onsubmit/web-apis",
       },
+      editLink: {
+        baseUrl: "https://github.com/onsubmit/web-apis/edit/main",
+      },
       customCss: ["./src/styles/custom.css"],
       sidebar: [
         {
