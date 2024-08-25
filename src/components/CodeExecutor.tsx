@@ -1,4 +1,4 @@
-import { useId, useState } from "react";
+import { useId, useRef, useState } from "react";
 import styles from "./CodeExecutor.module.css";
 
 type CodeExecutorProps = {
@@ -7,17 +7,20 @@ type CodeExecutorProps = {
 
 function CodeExecutor({ script }: CodeExecutorProps) {
   const listId = useId();
-  const [codeExecuted, setCodeExecuted] = useState(false);
+  const listRef = useRef<HTMLUListElement>(null);
 
-  function handleClick() {
+  function runCode() {
+    if (listRef.current) {
+      listRef.current.innerHTML = '';
+    }
+
     executeScript(script, listId);
-    setCodeExecuted(true);
   }
 
   return (
     <div className={styles.className}>
-      {codeExecuted ? null : <button onClick={handleClick}>Run code</button>}
-      <ul id={listId}></ul>
+      <button onClick={runCode}>Run code</button>
+      <ul ref={listRef} id={listId}></ul>
     </div>
   );
 }
