@@ -23,14 +23,26 @@
     padding: 0.5rem 0.75rem;
     font-family: monospace;
     margin: 0 !important;
+
+    &.warn {
+      background: #220;
+
+      &:hover {
+        background: #331;
+      }
+    }
+
+    &.error {
+      background: #200;
+
+      &:hover {
+        background: #311;
+      }
+    }
   }
 
   li:first-of-type {
     border-top: 1px solid #3A3A3A;
-  }
-
-  li:nth-child(odd) {
-    background: #0A0A0A;
   }
 
   li:hover {
