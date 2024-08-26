@@ -10,15 +10,18 @@ type PlaygroundProps = {
 };
 
 export default function Playground({ script, theme }: PlaygroundProps) {
-  const [value, setValue] = useState(script.trim());
+  const split = script.split("// ___Begin visible code snippet___");
+  const header = split.length === 2 ? split[0] : "";
+  const editorScript = split.length === 2 ? split[1] : split[0];
+  const [value, setValue] = useState(header + editorScript.trim());
 
-  const onScriptChange = useCallback((newValue: string) => {
-    setValue(newValue.trim());
+  const onEditorChange = useCallback((newEditorScript: string) => {
+    setValue((header + newEditorScript).trim());
   }, []);
 
   return (
     <div className={classNames("not-content", styles.className)}>
-      <CodeEditor theme={theme} script={script} onChange={onScriptChange} />
+      <CodeEditor theme={theme} script={editorScript} onChange={onEditorChange} />
       <CodeExecutor script={value} />
     </div>
   );

@@ -1,3 +1,10 @@
+if (!navigator.mediaDevices.selectAudioOutput) {
+  console.error("selectAudioOutput() not supported in this browser.");
+  return;
+}
+
+// ___Begin visible code snippet___
+
 const audio = document.createElement("audio");
 const currentSink = audio.sinkId || "default user agent device";
 console.log(`Current audio device id: ${currentSink}`);
