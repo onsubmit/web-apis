@@ -6,9 +6,14 @@ type CodeExecutorProps = {
 };
 
 const consoleMethodClassMap: Record<string, string> = {
+  log: "",
   warn: styles.warn,
   error: styles.error,
+  debug: styles.debug,
 };
+
+const supportedConsoleMethods = [...Object.keys(consoleMethodClassMap)];
+const supportedConsoleMethodsRegExStr = supportedConsoleMethods.join("|");
 
 function CodeExecutor({ script }: CodeExecutorProps) {
   const listId = useId();
@@ -35,7 +40,11 @@ function replaceConsoleMethods(script: string, listId: string) {
     return `_console.${method}(${message})`;
   }
 
-  return script.replaceAll(/console.(?<METHOD>log|warn|error)\((?<LOG>.+?)\);/g, replacer);
+  const regex = new RegExp(
+    `console.(?<METHOD>${supportedConsoleMethodsRegExStr})\((?<LOG>.+?)\);`,
+    "g"
+  );
+  return script.replaceAll(regex, replacer);
 }
 
 function wrapInTryCatch(script: string) {
@@ -54,6 +63,10 @@ function executeScript(script: string, listId: string) {
 }
 
 function getExecutableScript(script: string, listId: string): string {
+  const consoleOverrides = supportedConsoleMethods.map(
+    (m) => `${m}: (message) => _console._log("${m}", message, "${consoleMethodClassMap[m]}")`
+  );
+
   return `
 (async () => {
   const list = document.getElementById('${listId}');
@@ -65,12 +78,10 @@ function getExecutableScript(script: string, listId: string): string {
       list.appendChild(li);
       console[method](message);
     },
-    log: (message) => _console._log("log", message),
-    warn: (message) => _console._log("warn", message, "${consoleMethodClassMap.warn}"),
-    error: (message) => _console._log("error", message, "${consoleMethodClassMap.error}"),
+    ${consoleOverrides.join(",\n")}
   }
 ${replaceConsoleMethods(wrapInTryCatch(script), listId)}
-})()
+})();
 `;
 }
 

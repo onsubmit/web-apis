@@ -40,6 +40,14 @@
         background: #311;
       }
     }
+
+    &.debug {
+      background: #002;
+
+      &:hover {
+        background: #113;
+      }
+    }
   }
 
   li:first-of-type {
