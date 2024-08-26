@@ -5,14 +5,15 @@ type CodeExecutorProps = {
   script: string;
 };
 
-const consoleMethodClassMap: Record<string, string> = {
+const supportedConsoleMethods = ["log", "warn", "error", "debug"] as const;
+type SupportedConsoleMethod = (typeof supportedConsoleMethods)[number];
+const consoleMethodClassMap: Record<SupportedConsoleMethod, string> = {
   log: "",
   warn: styles.warn,
   error: styles.error,
   debug: styles.debug,
 };
 
-const supportedConsoleMethods = [...Object.keys(consoleMethodClassMap)];
 const supportedConsoleMethodsRegExStr = supportedConsoleMethods.join("|");
 
 function CodeExecutor({ script }: CodeExecutorProps) {
