@@ -6,7 +6,8 @@
     "jsxImportSource": "react",
     "plugins": [{ "name": "typescript-plugin-css-modules" }],
     "paths": {
-      "@components/*": ["src/components/*"]
+      "@components/*": ["src/components/*"],
+      "@snippets/*": ["src/content/snippets/*"]
     }
   }
 }

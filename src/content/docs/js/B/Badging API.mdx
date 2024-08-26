@@ -3,7 +3,9 @@ title: Badging API
 ---
 
 import { LinkCard } from "@astrojs/starlight/components";
-import Console from '@components/Console.astro';
+import Playground from '@components/Playground';
+import Navigator_clearAppBadge from '@snippets/Navigator.clearAppBadge().js?raw';
+import Navigator_setAppBadge from '@snippets/Navigator.setAppBadge().js?raw';
 
 The Badging API gives web developers a method of setting a badge on a document or application, to act as a notification that state has changed without displaying a more distracting notification. A common use case for this would be an application with a messaging feature displaying a badge on the app icon to show that new messages have arrived.
 
@@ -19,32 +21,8 @@ In a desktop browser, to see the results of the Badging API, you'll need to pin 
 
 ### Navigator.setAppBadge()
 
-```js
-// setAppBadge.js
-const notifications = 42;
-await navigator.setAppBadge(notifications);
-
-console.log(`Badge contents set to ${notifications}`);
-```
-
-<Console script='
-const notifications = 42;
-await navigator.setAppBadge(notifications);
-
-console.log(`Badge contents set to ${notifications}`);
-' />
+<Playground client:only="react" theme="dark" script={Navigator_setAppBadge} />
 
 ### Navigator.clearAppBadge()
 
-```js
-// clearAppBadge.js
-await navigator.clearAppBadge();
-
-console.log("Badge contents cleared");
-```
-
-<Console script='
-await navigator.clearAppBadge();
-
-console.log("Badge contents cleared");
-' />
+<Playground client:only="react" theme="dark" script={Navigator_clearAppBadge} />

@@ -3,7 +3,9 @@ title: Keyboard
 ---
 
 import { LinkCard } from "@astrojs/starlight/components";
-import Console from '@components/Console.astro';
+import Playground from '@components/Playground';
+import Keyboard_getLayoutMap from '@snippets/Keyboard.getLayoutMap().js?raw';
+import Keyboard_lock from '@snippets/Keyboard.lock().js?raw';
 
 The Keyboard API provides methods for working with a physical keyboard that is attached to a device running a browser.
 
@@ -23,26 +25,7 @@ The Keyboard API provides methods for working with a physical keyboard that is a
   target="_blank"
 />
 
-```js
-// getLayoutMap.js
-const layoutMap = await navigator.keyboard.getLayoutMap();
-
-console.log(`layoutMap.size: ${layoutMap.size}`);
-
-for (const [key, value] of layoutMap.entries()) {
-  console.log(`${key}: ${value}`);
-}
-```
-
-<Console script='
-  const layoutMap = await navigator.keyboard.getLayoutMap();
-
-  console.log(`layoutMap.size: ${layoutMap.size}`);
-
-  for (const [key, value] of layoutMap.entries()) {
-    console.log(`${key}: ${value}`);
-  }
-' />
+<Playground client:only="react" theme="dark" script={Keyboard_getLayoutMap} />
 
 ### lock()
 
@@ -52,16 +35,7 @@ for (const [key, value] of layoutMap.entries()) {
   target="_blank"
 />
 
-```js
-// lock.js
-await navigator.keyboard.lock(["KeyW", "KeyA", "KeyS", "KeyD"]);
-console.log("Keypresses are being captured for the WASD keys.");
-```
-
-<Console script='
-  await navigator.keyboard.lock(["KeyW", "KeyA", "KeyS", "KeyD"]);
-  console.log("Keypresses are being captured for the WASD keys.");
-' />
+<Playground client:only="react" theme="dark" script={Keyboard_lock} />
 
 ## Further reading
 

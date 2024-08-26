@@ -14,6 +14,10 @@ export default function CodeEditor({ script, theme }: CodeEditorProps) {
       theme={theme === "light" ? vscodeLight : vscodeDark}
       value={script.trim()}
       extensions={[javascript()]}
+      basicSetup={{
+        lineNumbers: false,
+        foldGutter: false,
+      }}
     />
   );
 }
