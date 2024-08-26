@@ -6,7 +6,6 @@ type CodeExecutorProps = {
 };
 
 const consoleMethodClassMap: Record<string, string> = {
-  log: "",
   warn: styles.warn,
   error: styles.error,
 };
@@ -33,24 +32,20 @@ function CodeExecutor({ script }: CodeExecutorProps) {
 
 function replaceConsoleMethods(script: string, listId: string) {
   function replacer(_match: string, method: string, message: string) {
-    const consoleClass = consoleMethodClassMap[method];
-    return `
-li = document.createElement("li");
-li.textContent = ${message};
-${consoleClass ? `li.classList.add("${consoleMethodClassMap[method]}");` : ""}
-list.appendChild(li);
-`;
+    return `_console.${method}(${message})`;
   }
 
-  return (
-    `const list = document.getElementById('${listId}');\n` +
-    `let li = null;\n` +
-    script.replaceAll(/console.(?<METHOD>log|warn|error)\((?<LOG>.+?)\);/g, replacer)
-  );
+  return script.replaceAll(/console.(?<METHOD>log|warn|error)\((?<LOG>.+?)\);/g, replacer);
 }
 
 function wrapInTryCatch(script: string) {
-  return `try { ${script} } catch (e) { console.error(e); }`;
+  return `
+try {
+debugger;
+${script}
+} catch (e) {
+ console.error(e);
+}`;
 }
 
 function executeScript(script: string, listId: string) {
@@ -59,7 +54,24 @@ function executeScript(script: string, listId: string) {
 }
 
 function getExecutableScript(script: string, listId: string): string {
-  return `(async () => { ${replaceConsoleMethods(wrapInTryCatch(script), listId)} })()`;
+  return `
+(async () => {
+  const list = document.getElementById('${listId}');
+  const _console = {
+    _log: (method, message, className) => {
+      const li = document.createElement("li");
+      li.textContent = message;
+      className && li.classList.add(className);
+      list.appendChild(li);
+      console[method](message);
+    },
+    log: (message) => _console._log("log", message),
+    warn: (message) => _console._log("warn", message, "${consoleMethodClassMap.warn}"),
+    error: (message) => _console._log("error", message, "${consoleMethodClassMap.error}"),
+  }
+${replaceConsoleMethods(wrapInTryCatch(script), listId)}
+})()
+`;
 }
 
 export { CodeExecutor };
