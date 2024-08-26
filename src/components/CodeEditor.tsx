@@ -10,7 +10,6 @@ type CodeEditorProps = {
 export default function CodeEditor({ script, theme }: CodeEditorProps) {
   return (
     <CodeMirror
-      className="not-content"
       theme={theme === "light" ? vscodeLight : vscodeDark}
       value={script.trim()}
       extensions={[javascript()]}
