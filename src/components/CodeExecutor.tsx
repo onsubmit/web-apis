@@ -65,7 +65,7 @@ function executeScript(script: string, listId: string) {
 
 function getExecutableScript(script: string, listId: string): string {
   const consoleOverrides = supportedConsoleMethods.map(
-    (m) => `${m}: (message) => _console._log("${m}", message, "${consoleMethodClassMap[m]}")`
+    (m) => `    ${m}: (message) => _console._log("${m}", message, "${consoleMethodClassMap[m]}")`
   );
 
   return `
@@ -79,7 +79,7 @@ function getExecutableScript(script: string, listId: string): string {
       list.appendChild(li);
       console[method](message);
     },
-    ${consoleOverrides.join(",\n")}
+${consoleOverrides.join(",\n")}
   }
 ${replaceConsoleMethods(wrapInTryCatch(script), listId)}
 })();
