@@ -8,6 +8,7 @@ import styles from "./CodeExecutor.module.css";
 
 type CodeExecutorProps = {
   script: string;
+  onResetEditor: () => void;
 };
 
 const supportedConsoleMethods = ["log", "warn", "error", "debug"] as const;
@@ -21,24 +22,35 @@ const consoleMethodClassMap: Record<SupportedConsoleMethod, string> = {
 
 const supportedConsoleMethodsRegExStr = supportedConsoleMethods.join("|");
 
-function CodeExecutor({ script }: CodeExecutorProps) {
+function CodeExecutor({ script, onResetEditor }: CodeExecutorProps) {
   const listId = useId();
   const listRef = useRef<HTMLUListElement>(null);
   const [theme, setTheme] = useState<StarlightTheme>(getInitialTheme());
 
   useStarlightTheme(setTheme);
 
-  function runCode() {
+  function resetConsole() {
     if (listRef.current) {
       listRef.current.innerHTML = "";
     }
+  }
 
+  function runCode() {
+    resetConsole();
     executeScript(script, listId);
+  }
+
+  function resetCode() {
+    resetConsole();
+    onResetEditor();
   }
 
   return (
     <div className={classNames(styles.className, theme === "dark" ? styles.dark : styles.light)}>
-      <button onClick={runCode}>Run code</button>
+      <div className={styles.buttons}>
+        <button onClick={runCode}>Run code</button>
+        <button onClick={resetCode}>Reset code</button>
+      </div>
       <ul ref={listRef} id={listId}></ul>
     </div>
   );

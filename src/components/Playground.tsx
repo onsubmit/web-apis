@@ -1,5 +1,6 @@
+import type { ReactCodeMirrorRef } from "@uiw/react-codemirror";
 import classNames from "classnames";
-import { useCallback, useState } from "react";
+import { useCallback, useRef, useState } from "react";
 import useStarlightTheme, {
   getInitialTheme,
   type StarlightTheme,
@@ -14,22 +15,35 @@ type PlaygroundProps = {
 
 export default function Playground({ script }: PlaygroundProps) {
   const split = script.split("// ___Begin visible code snippet___");
-  const header = split.length === 2 ? split[0] : "";
-  const editorScript = split.length === 2 ? split[1] : split[0];
+  const header = split.length === 2 ? split[0].trim() : "";
+  const editorScript = (split.length === 2 ? split[1] : split[0]).trim();
 
-  const [value, setValue] = useState(header + editorScript.trim());
+  const editorRef = useRef<ReactCodeMirrorRef>(null);
+  const [executorValue, setExecutorValue] = useState(header + editorScript);
   const [theme, setTheme] = useState<StarlightTheme>(getInitialTheme());
+
+  function onResetEditor() {
+    const view = editorRef.current?.view;
+    view?.dispatch({
+      changes: {
+        from: 0,
+        to: view.state.doc.toString().length,
+        insert: editorScript,
+      },
+    });
+    setExecutorValue(header + editorScript);
+  }
 
   useStarlightTheme(setTheme);
 
   const onEditorChange = useCallback((newEditorScript: string) => {
-    setValue((header + newEditorScript).trim());
+    setExecutorValue((header + newEditorScript).trim());
   }, []);
 
   return (
     <div className={classNames("not-content", styles.className)}>
-      <CodeEditor theme={theme} script={editorScript} onChange={onEditorChange} />
-      <CodeExecutor script={value} />
+      <CodeEditor ref={editorRef} theme={theme} script={editorScript} onChange={onEditorChange} />
+      <CodeExecutor script={executorValue} onResetEditor={onResetEditor} />
     </div>
   );
 }
