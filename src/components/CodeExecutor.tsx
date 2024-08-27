@@ -97,6 +97,7 @@ function getExecutableScript(script: string, listId: string): string {
       li.textContent = message;
       className && li.classList.add(className);
       list.appendChild(li);
+      list.scrollTop = list.scrollHeight;
       console[method](message);
     },
 ${consoleOverrides.join(",\n")}
