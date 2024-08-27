@@ -1,10 +1,78 @@
 .className {
-  background: #000;
   border-top: 1px solid var(--sl-color-gray-5);
   padding: 1rem;
   font-family: system-ui;
   font-size: 1rem;
-  color: #FFF;
+
+  &.dark {
+    background: #000;
+    color: #fff;
+
+    li {
+      &.warn {
+        background: #220;
+
+        &:hover {
+          background: #331;
+        }
+      }
+
+      &.error {
+        background: #200;
+
+        &:hover {
+          background: #311;
+        }
+      }
+
+      &.debug {
+        background: #002;
+
+        &:hover {
+          background: #113;
+        }
+      }
+    }
+
+    li:hover {
+      background: #111;
+    }
+  }
+
+  &.light {
+    background: #fff;
+    color: #000;
+
+    li {
+      &.warn {
+        background: #ffd;
+
+        &:hover {
+          background: #eec;
+        }
+      }
+
+      &.error {
+        background: #fdd;
+
+        &:hover {
+          background: #ecc;
+        }
+      }
+
+      &.debug {
+        background: #ddf;
+
+        &:hover {
+          background: #cce;
+        }
+      }
+    }
+
+    li:hover {
+      background: #eee;
+    }
+  }
 
   ul {
     margin: 0 !important;
@@ -24,37 +92,9 @@
     padding: 0.5rem 0.75rem;
     font-family: monospace;
     margin: 0 !important;
-
-    &.warn {
-      background: #220;
-
-      &:hover {
-        background: #331;
-      }
-    }
-
-    &.error {
-      background: #200;
-
-      &:hover {
-        background: #311;
-      }
-    }
-
-    &.debug {
-      background: #002;
-
-      &:hover {
-        background: #113;
-      }
-    }
   }
 
   li:first-of-type {
     border-top: 1px solid #3A3A3A;
-  }
-
-  li:hover {
-    background: #111;
   }
 }

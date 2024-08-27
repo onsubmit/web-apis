@@ -1,4 +1,9 @@
-import { useId, useRef } from "react";
+import classNames from "classnames";
+import { useId, useRef, useState } from "react";
+import useStarlightTheme, {
+  getInitialTheme,
+  type StarlightTheme,
+} from "src/hooks/useStarlightTheme";
 import styles from "./CodeExecutor.module.css";
 
 type CodeExecutorProps = {
@@ -19,6 +24,9 @@ const supportedConsoleMethodsRegExStr = supportedConsoleMethods.join("|");
 function CodeExecutor({ script }: CodeExecutorProps) {
   const listId = useId();
   const listRef = useRef<HTMLUListElement>(null);
+  const [theme, setTheme] = useState<StarlightTheme>(getInitialTheme());
+
+  useStarlightTheme(setTheme);
 
   function runCode() {
     if (listRef.current) {
@@ -29,7 +37,7 @@ function CodeExecutor({ script }: CodeExecutorProps) {
   }
 
   return (
-    <div className={styles.className}>
+    <div className={classNames(styles.className, theme === "dark" ? styles.dark : styles.light)}>
       <button onClick={runCode}>Run code</button>
       <ul ref={listRef} id={listId}></ul>
     </div>
