@@ -1,0 +1,38 @@
+---
+title: Broadcast Channel API
+---
+
+import { Aside, LinkCard, TabItem, Tabs } from "@astrojs/starlight/components";
+import Playground from '@components/Playground';
+import Receiver1 from '@snippets/Broadcast Channel API/receiver1.js?raw';
+import Receiver2 from '@snippets/Broadcast Channel API/receiver2.js?raw';
+import Sender from '@snippets/Broadcast Channel API/sender.js?raw';
+
+
+The Broadcast Channel API allows basic communication between browsing contexts and workers on the same origin.
+
+By creating a `BroadcastChannel` object, you can receive any messages that are posted to it. You don't have to maintain a reference to the frames or workers you wish to communicate with: they can "subscribe" to a particular channel by constructing their own `BroadcastChannel` with the same name, and have bi-directional communication between all of them.
+
+<LinkCard
+  title="Broadcast Channel API - Web APIs | MDN"
+  href="https://developer.mozilla.org/en-US/docs/Web/API/Broadcast_Channel_API"
+  target="_blank"
+/>
+
+<Aside type="caution">
+  Be sure to run the code on each tab below!
+
+  The **Sender** tab send the messages and the **Receiver** tabs receive them!
+</Aside>
+
+<Tabs>
+  <TabItem label="Sender" icon="rss">
+    <Playground client:only="react" theme="dark" script={Sender} />
+  </TabItem>
+  <TabItem label="Receiver 1">
+    <Playground client:only="react" theme="dark" script={Receiver1} />
+  </TabItem>
+  <TabItem label="Receiver 2">
+    <Playground client:only="react" theme="dark" script={Receiver2} />
+  </TabItem>
+</Tabs>
