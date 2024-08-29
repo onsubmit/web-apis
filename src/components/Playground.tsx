@@ -1,49 +1,132 @@
 import type { ReactCodeMirrorRef } from "@uiw/react-codemirror";
 import classNames from "classnames";
-import { useCallback, useRef, useState } from "react";
+import { useCallback, useMemo, useRef, useState } from "react";
 import useStarlightTheme, {
   getInitialTheme,
   type StarlightTheme,
 } from "src/hooks/useStarlightTheme";
-import CodeEditor from "./CodeEditor";
-import { CodeExecutor } from "./CodeExecutor";
+import CodeEditor, { type Language } from "./CodeEditor";
 import styles from "./Playground.module.css";
 
 type PlaygroundProps = {
-  script: string;
+  languages: Record<Language, string>;
 };
 
-export default function Playground({ script }: PlaygroundProps) {
-  const split = script.split("// ___Begin visible code snippet___");
-  const header = split.length === 2 ? split[0].trim() : "";
-  const editorScript = (split.length === 2 ? split[1] : split[0]).trim();
+type PlaygroundLanguageState = {
+  header: string;
+  initialEditorValue: string;
+  executorValue: string;
+};
 
-  const editorRef = useRef<ReactCodeMirrorRef>(null);
-  const [executorValue, setExecutorValue] = useState(header + editorScript);
+type LanguageState = Record<Language, PlaygroundLanguageState>;
+
+const languageNameMap: Record<Language, string> = {
+  js: "JavaScript",
+  html: "HTML",
+  css: "CSS",
+};
+
+// const languageIconMap = {
+//   js: <Icon name="seti:javascript" />,
+//   html: <Icon name="seti:html" />,
+//   css: <Icon name="seti:css" />,
+// };
+
+export default function Playground({ languages }: PlaygroundProps) {
+  const initialState: LanguageState = useMemo(() => getInitialLanguageState(languages), []);
+
+  const editorRefs = {
+    js: useRef<ReactCodeMirrorRef>(null),
+    html: useRef<ReactCodeMirrorRef>(null),
+    css: useRef<ReactCodeMirrorRef>(null),
+  };
+
+  const [state, setState] = useState<LanguageState>(initialState);
   const [theme, setTheme] = useState<StarlightTheme>(getInitialTheme());
 
-  function onResetEditor() {
-    const view = editorRef.current?.view;
+  function onResetEditor(language: Language) {
+    const view = editorRefs[language].current?.view;
     view?.dispatch({
       changes: {
         from: 0,
         to: view.state.doc.toString().length,
-        insert: editorScript,
+        insert: initialState[language].initialEditorValue,
       },
     });
-    setExecutorValue(header + editorScript);
+
+    setState((s) => ({
+      ...s,
+      [language]: {
+        executorValue: s[language].header + s[language].initialEditorValue,
+      },
+    }));
   }
 
   useStarlightTheme(setTheme);
 
-  const onEditorChange = useCallback((newEditorScript: string) => {
-    setExecutorValue((header + newEditorScript).trim());
+  const onEditorChange = useCallback((language: Language, newEditorScript: string) => {
+    setState((s) => ({
+      ...s,
+      [language]: {
+        executorValue: (s[language].header + s[language].initialEditorValue).trim(),
+      },
+    }));
   }, []);
+
+  function getEditors() {
+    const languageNames = Object.keys(languages) as Array<Language>;
+    const length = languageNames.length;
+    if (length === 0) {
+      throw new Error("At least one language is required.");
+    }
+
+    if (length === 1) {
+      const language = languageNames[0];
+      const script = languages[language];
+      return (
+        <CodeEditor
+          ref={editorRefs[language]}
+          language={language}
+          theme={theme}
+          script={script}
+          onChange={() => (newValue: string) => onEditorChange(language, newValue)}
+        />
+      );
+    }
+
+    return (Object.entries(languages) as Array<[language: Language, script: string]>).map(
+      ([language, script]) => (
+        <CodeEditor
+          key={language}
+          ref={editorRefs[language]}
+          language={language}
+          theme={theme}
+          script={script}
+          onChange={() => (newValue: string) => onEditorChange(language, newValue)}
+        />
+      )
+    );
+  }
 
   return (
     <div className={classNames("not-content", styles.className)}>
-      <CodeEditor ref={editorRef} theme={theme} script={editorScript} onChange={onEditorChange} />
-      <CodeExecutor script={executorValue} onResetEditor={onResetEditor} />
+      {getEditors()}
+      {/* <CodeExecutor script={executorValue} onResetEditor={onResetEditor} /> */}
     </div>
+  );
+}
+
+function getInitialLanguageState(languages: PlaygroundProps["languages"]): LanguageState {
+  return (Object.entries(languages) as Array<[Language, string]>).reduce<LanguageState>(
+    (accumulator, [language, script]) => {
+      const split = script.split("// ___Begin visible code snippet___");
+      const header = split.length === 2 ? split[0].trim() : "";
+      const initialEditorValue = (split.length === 2 ? split[1] : split[0]).trim();
+      const executorValue = header + initialEditorValue;
+
+      accumulator[language] = { header, initialEditorValue, executorValue };
+      return accumulator;
+    },
+    {} as LanguageState
   );
 }
