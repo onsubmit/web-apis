@@ -7,6 +7,10 @@ import useStarlightTheme, {
 } from "src/hooks/useStarlightTheme";
 import CodeEditor, { type Language } from "./CodeEditor";
 import styles from "./Playground.module.css";
+import Tabs from '@mui/joy/Tabs';
+import TabList from '@mui/joy/TabList';
+import Tab from '@mui/joy/Tab';
+import TabPanel from '@mui/joy/TabPanel';
 
 type PlaygroundProps = {
   languages: Record<Language, string>;
@@ -25,12 +29,6 @@ const languageNameMap: Record<Language, string> = {
   html: "HTML",
   css: "CSS",
 };
-
-// const languageIconMap = {
-//   js: <Icon name="seti:javascript" />,
-//   html: <Icon name="seti:html" />,
-//   css: <Icon name="seti:css" />,
-// };
 
 export default function Playground({ languages }: PlaygroundProps) {
   const initialState: LanguageState = useMemo(() => getInitialLanguageState(languages), []);
@@ -94,17 +92,28 @@ export default function Playground({ languages }: PlaygroundProps) {
       );
     }
 
-    return (Object.entries(languages) as Array<[language: Language, script: string]>).map(
-      ([language, script]) => (
-        <CodeEditor
-          key={language}
-          ref={editorRefs[language]}
-          language={language}
-          theme={theme}
-          script={script}
-          onChange={() => (newValue: string) => onEditorChange(language, newValue)}
-        />
-      )
+    return (
+      <Tabs size="lg">
+        <TabList>
+          {(Object.keys(languages) as Array<Language>).map(language => (
+            <Tab>{languageNameMap[language]}</Tab>
+          ))}
+        </TabList>
+        {(Object.entries(languages) as Array<[language: Language, script: string]>).map(
+          ([language, script], index) => (
+            <TabPanel value={index} keepMounted={true}>
+              <CodeEditor
+                key={language}
+                ref={editorRefs[language]}
+                language={language}
+                theme={theme}
+                script={script}
+                onChange={() => (newValue: string) => onEditorChange(language, newValue)}
+              />
+            </TabPanel>
+          )
+        )}
+      </Tabs>
     );
   }
 
