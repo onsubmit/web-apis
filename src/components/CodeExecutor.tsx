@@ -5,10 +5,11 @@ import useStarlightTheme, {
   type StarlightTheme,
 } from "src/hooks/useStarlightTheme";
 import styles from "./CodeExecutor.module.css";
+import type { LanguageState } from "./Playground";
 
 type CodeExecutorProps = {
-  script: string;
-  onResetEditor: () => void;
+  state: LanguageState;
+  onResetEditors: () => void;
 };
 
 const supportedConsoleMethods = ["log", "warn", "error", "debug"] as const;
@@ -22,7 +23,7 @@ const consoleMethodClassMap: Record<SupportedConsoleMethod, string> = {
 
 const supportedConsoleMethodsRegExStr = supportedConsoleMethods.join("|");
 
-function CodeExecutor({ script, onResetEditor }: CodeExecutorProps) {
+function CodeExecutor({ state, onResetEditors }: CodeExecutorProps) {
   const listId = useId();
   const listRef = useRef<HTMLUListElement>(null);
   const [theme, setTheme] = useState<StarlightTheme>(getInitialTheme());
@@ -37,12 +38,12 @@ function CodeExecutor({ script, onResetEditor }: CodeExecutorProps) {
 
   function runCode() {
     resetConsole();
-    executeScript(script, listId);
+    executeScript(state.js.executorValue!, listId);
   }
 
   function resetCode() {
     resetConsole();
-    onResetEditor();
+    onResetEditors();
   }
 
   return (

@@ -11,18 +11,20 @@ import Tabs from '@mui/joy/Tabs';
 import TabList from '@mui/joy/TabList';
 import Tab from '@mui/joy/Tab';
 import TabPanel from '@mui/joy/TabPanel';
+import { CodeExecutor } from "./CodeExecutor";
 
 type PlaygroundProps = {
   languages: Record<Language, string>;
 };
 
-type PlaygroundLanguageState = {
+// TODO: Fix the state updates so this doesn't have to be Partial.
+type PlaygroundLanguageState = Partial<{
   header: string;
   initialEditorValue: string;
   executorValue: string;
-};
+}>;
 
-type LanguageState = Record<Language, PlaygroundLanguageState>;
+export type LanguageState = Record<Language, PlaygroundLanguageState>;
 
 const languageNameMap: Record<Language, string> = {
   js: "JavaScript",
@@ -42,21 +44,28 @@ export default function Playground({ languages }: PlaygroundProps) {
   const [state, setState] = useState<LanguageState>(initialState);
   const [theme, setTheme] = useState<StarlightTheme>(getInitialTheme());
 
-  function onResetEditor(language: Language) {
-    const view = editorRefs[language].current?.view;
-    view?.dispatch({
-      changes: {
-        from: 0,
-        to: view.state.doc.toString().length,
-        insert: initialState[language].initialEditorValue,
-      },
-    });
+  function onResetEditors() {
+    const newState: Partial<LanguageState> = {};
+
+    const languageNames = Object.keys(languages) as Array<Language>;
+    for (const language of languageNames) {
+      const view = editorRefs[language].current?.view;
+      view?.dispatch({
+        changes: {
+          from: 0,
+          to: view.state.doc.toString().length,
+          insert: initialState[language].initialEditorValue,
+        },
+      });
+
+      newState[language] = {
+        executorValue: state[language].header! + state[language].initialEditorValue!
+      };
+    }
 
     setState((s) => ({
       ...s,
-      [language]: {
-        executorValue: s[language].header + s[language].initialEditorValue,
-      },
+      ...newState,
     }));
   }
 
@@ -66,10 +75,12 @@ export default function Playground({ languages }: PlaygroundProps) {
     setState((s) => ({
       ...s,
       [language]: {
-        executorValue: (s[language].header + s[language].initialEditorValue).trim(),
+        executorValue: ((s[language].header ?? "") + newEditorScript).trim(),
       },
     }));
   }, []);
+
+  const getEditorOnChangeCallback = (language: Language) => (newValue: string) => onEditorChange(language, newValue);
 
   function getEditors() {
     const languageNames = Object.keys(languages) as Array<Language>;
@@ -87,7 +98,7 @@ export default function Playground({ languages }: PlaygroundProps) {
           language={language}
           theme={theme}
           script={script}
-          onChange={() => (newValue: string) => onEditorChange(language, newValue)}
+          onChange={getEditorOnChangeCallback(language)}
         />
       );
     }
@@ -96,19 +107,19 @@ export default function Playground({ languages }: PlaygroundProps) {
       <Tabs size="lg">
         <TabList>
           {(Object.keys(languages) as Array<Language>).map(language => (
-            <Tab>{languageNameMap[language]}</Tab>
+            <Tab key={language}>{languageNameMap[language]}</Tab>
           ))}
         </TabList>
         {(Object.entries(languages) as Array<[language: Language, script: string]>).map(
           ([language, script], index) => (
-            <TabPanel value={index} keepMounted={true}>
+            <TabPanel key={language} value={index} keepMounted={true}>
               <CodeEditor
                 key={language}
                 ref={editorRefs[language]}
                 language={language}
                 theme={theme}
                 script={script}
-                onChange={() => (newValue: string) => onEditorChange(language, newValue)}
+                onChange={getEditorOnChangeCallback(language)}
               />
             </TabPanel>
           )
@@ -120,7 +131,7 @@ export default function Playground({ languages }: PlaygroundProps) {
   return (
     <div className={classNames("not-content", styles.className)}>
       {getEditors()}
-      {/* <CodeExecutor script={executorValue} onResetEditor={onResetEditor} /> */}
+      <CodeExecutor state={state} onResetEditors={onResetEditors} />
     </div>
   );
 }
