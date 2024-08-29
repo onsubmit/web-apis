@@ -25,7 +25,9 @@ const supportedConsoleMethodsRegExStr = supportedConsoleMethods.join("|");
 
 function CodeExecutor({ state, onResetEditors }: CodeExecutorProps) {
   const listId = useId();
+  const htmlAreaId = useId();
   const listRef = useRef<HTMLUListElement>(null);
+  const htmlAreaRef = useRef<HTMLDivElement>(null);
   const [theme, setTheme] = useState<StarlightTheme>(getInitialTheme());
 
   useStarlightTheme(setTheme);
@@ -36,13 +38,25 @@ function CodeExecutor({ state, onResetEditors }: CodeExecutorProps) {
     }
   }
 
+  function resetHtmlArea() {
+    if (htmlAreaRef.current) {
+      htmlAreaRef.current.innerHTML = "";
+    }
+  }
+
   function runCode() {
     resetConsole();
+
+    if (htmlAreaRef.current) {
+      htmlAreaRef.current.innerHTML = `<style>${state.css.executorValue!}</style>${state.html.executorValue!}`;
+    }
+
     executeScript(state.js.executorValue!, listId);
   }
 
   function resetCode() {
     resetConsole();
+    resetHtmlArea();
     onResetEditors();
   }
 
@@ -52,6 +66,7 @@ function CodeExecutor({ state, onResetEditors }: CodeExecutorProps) {
         <button onClick={runCode}>Run code</button>
         <button onClick={resetCode}>Reset code</button>
       </div>
+      <div ref={htmlAreaRef} id={htmlAreaId}></div>
       <ul ref={listRef} id={listId}></ul>
     </div>
   );
