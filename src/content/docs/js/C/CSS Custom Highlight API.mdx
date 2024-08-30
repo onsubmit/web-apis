@@ -4,7 +4,9 @@ title: CSS Custom Highlight API
 
 import { LinkCard } from "@astrojs/starlight/components";
 import Playground from '@components/Playground';
-import CSS_Custom_Highlight_API from '@snippets/CSS Custom Highlight API.js?raw';
+import CSS_Custom_Highlight_API_css from '@snippets/CSS Custom Highlight API/sample.css?raw';
+import CSS_Custom_Highlight_API_html from '@snippets/CSS Custom Highlight API/sample.html?raw';
+import CSS_Custom_Highlight_API_js from '@snippets/CSS Custom Highlight API/sample.js?raw';
 
 The CSS Custom Highlight API provides a mechanism for styling arbitrary text ranges on a document by using JavaScript to create the ranges, and CSS to style them.
 
@@ -14,4 +16,10 @@ The CSS Custom Highlight API provides a mechanism for styling arbitrary text ran
   target="_blank"
 />
 
-<Playground client:only="react" theme="dark" languages={ { js: 'console.log(1);', html: '<p class="red">hello world</p>', css: '.red { color: red; }' }} />
+<Playground client:only="react" theme="dark" languages={
+  {
+    js: CSS_Custom_Highlight_API_js,
+    html: CSS_Custom_Highlight_API_html,
+    css: CSS_Custom_Highlight_API_css
+  }
+} />

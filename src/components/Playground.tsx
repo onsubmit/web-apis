@@ -1,18 +1,18 @@
+import Tab from "@mui/joy/Tab";
+import TabList from "@mui/joy/TabList";
+import TabPanel from "@mui/joy/TabPanel";
+import Tabs from "@mui/joy/Tabs";
 import type { ReactCodeMirrorRef } from "@uiw/react-codemirror";
 import classNames from "classnames";
+import { produce } from "immer";
 import { useCallback, useMemo, useRef, useState } from "react";
 import useStarlightTheme, {
   getInitialTheme,
   type StarlightTheme,
 } from "src/hooks/useStarlightTheme";
 import CodeEditor, { type Language } from "./CodeEditor";
-import styles from "./Playground.module.css";
-import Tabs from '@mui/joy/Tabs';
-import TabList from '@mui/joy/TabList';
-import Tab from '@mui/joy/Tab';
-import TabPanel from '@mui/joy/TabPanel';
 import { CodeExecutor } from "./CodeExecutor";
-import { produce } from "immer";
+import styles from "./Playground.module.css";
 
 type PlaygroundProps = {
   languages: Record<Language, string>;
@@ -57,22 +57,27 @@ export default function Playground({ languages }: PlaygroundProps) {
       });
     }
 
-    setState(produce((s) => {
-      for (const language of languageNames) {
-        s[language].executorValue = s[language].header + s[language].initialEditorValue
-      }
-    }));
+    setState(
+      produce((s) => {
+        for (const language of languageNames) {
+          s[language].executorValue = s[language].header + s[language].initialEditorValue;
+        }
+      })
+    );
   }
 
   useStarlightTheme(setTheme);
 
   const onEditorChange = useCallback((language: Language, newEditorScript: string) => {
-    setState(produce((s) => {
-      s[language].executorValue = (s[language].header + newEditorScript).trim()
-    }));
+    setState(
+      produce((s) => {
+        s[language].executorValue = (s[language].header + newEditorScript).trim();
+      })
+    );
   }, []);
 
-  const getEditorOnChangeCallback = (language: Language) => (newValue: string) => onEditorChange(language, newValue);
+  const getEditorOnChangeCallback = (language: Language) => (newValue: string) =>
+    onEditorChange(language, newValue);
 
   function getEditors() {
     const languageNames = Object.keys(languages) as Array<Language>;
@@ -83,7 +88,7 @@ export default function Playground({ languages }: PlaygroundProps) {
 
     if (length === 1) {
       const language = languageNames[0];
-      const script = languages[language];
+      const script = initialState[language].initialEditorValue;
       return (
         <CodeEditor
           ref={editorRefs[language]}
@@ -98,24 +103,22 @@ export default function Playground({ languages }: PlaygroundProps) {
     return (
       <Tabs size="lg">
         <TabList>
-          {(Object.keys(languages) as Array<Language>).map(language => (
+          {(Object.keys(languages) as Array<Language>).map((language) => (
             <Tab key={language}>{languageNameMap[language]}</Tab>
           ))}
         </TabList>
-        {(Object.entries(languages) as Array<[language: Language, script: string]>).map(
-          ([language, script], index) => (
-            <TabPanel key={language} value={index} keepMounted={true}>
-              <CodeEditor
-                key={language}
-                ref={editorRefs[language]}
-                language={language}
-                theme={theme}
-                script={script}
-                onChange={getEditorOnChangeCallback(language)}
-              />
-            </TabPanel>
-          )
-        )}
+        {(Object.keys(languages) as Array<Language>).map((language, index) => (
+          <TabPanel key={language} value={index} keepMounted={true}>
+            <CodeEditor
+              key={language}
+              ref={editorRefs[language]}
+              language={language}
+              theme={theme}
+              script={initialState[language].initialEditorValue}
+              onChange={getEditorOnChangeCallback(language)}
+            />
+          </TabPanel>
+        ))}
       </Tabs>
     );
   }
@@ -134,7 +137,7 @@ function getInitialLanguageState(languages: PlaygroundProps["languages"]): Langu
       const split = script.split("// ___Begin visible code snippet___");
       const header = split.length === 2 ? split[0].trim() : "";
       const initialEditorValue = (split.length === 2 ? split[1] : split[0]).trim();
-      const executorValue = header + initialEditorValue;
+      const executorValue = `${header}\n\n${initialEditorValue}`;
 
       accumulator[language] = { header, initialEditorValue, executorValue };
       return accumulator;

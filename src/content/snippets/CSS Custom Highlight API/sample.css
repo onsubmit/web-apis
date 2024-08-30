@@ -1,0 +1,8 @@
+::highlight(search-results) {
+  background-color: #dd6;
+  color: #000;
+}
+
+article {
+  margin: 1rem;
+}

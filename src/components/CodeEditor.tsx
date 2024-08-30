@@ -23,6 +23,7 @@ const CodeEditor = forwardRef<ReactCodeMirrorRef, CodeEditorProps>(
     const { state, container, setContainer, view } = useCodeMirror({
       container: editorRef.current,
       theme: theme === "light" ? vscodeLight : vscodeDark,
+      maxHeight: "600px",
       extensions: [getLanguageExtension(language), EditorView.lineWrapping],
       value: script.trim(),
       onChange,

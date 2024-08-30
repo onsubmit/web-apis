@@ -41,6 +41,7 @@ function CodeExecutor({ state: { js, html, css }, onResetEditors }: CodeExecutor
   function resetHtmlArea() {
     if (htmlAreaRef.current) {
       htmlAreaRef.current.innerHTML = "";
+      htmlAreaRef.current.style.display = "none";
     }
   }
 
@@ -51,6 +52,7 @@ function CodeExecutor({ state: { js, html, css }, onResetEditors }: CodeExecutor
       // The @scope CSS at-rule doesn't work in Firefox yet.
       // https://bugzilla.mozilla.org/show_bug.cgi?id=1830512
       htmlAreaRef.current.innerHTML = `<style>${scopeCss(css.executorValue, htmlAreaId)}</style>${html.executorValue}`;
+      htmlAreaRef.current.style.display = "block";
     }
 
     executeScript(js.executorValue, listId);
@@ -68,7 +70,7 @@ function CodeExecutor({ state: { js, html, css }, onResetEditors }: CodeExecutor
         <button onClick={runCode}>Run code</button>
         <button onClick={resetCode}>Reset code</button>
       </div>
-      <div ref={htmlAreaRef} id={htmlAreaId}></div>
+      <div ref={htmlAreaRef} id={htmlAreaId} className={styles.htmlArea}></div>
       <ul ref={listRef} id={listId}></ul>
     </div>
   );
