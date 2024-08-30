@@ -48,7 +48,9 @@ function CodeExecutor({ state: { js, html, css }, onResetEditors }: CodeExecutor
     resetConsole();
 
     if (htmlAreaRef.current) {
-      htmlAreaRef.current.innerHTML = `<style>${css.executorValue}</style>${html.executorValue}`;
+      // The @scope CSS at-rule doesn't work in Firefox yet.
+      // https://bugzilla.mozilla.org/show_bug.cgi?id=1830512
+      htmlAreaRef.current.innerHTML = `<style>${scopeCss(css.executorValue, htmlAreaId)}</style>${html.executorValue}`;
     }
 
     executeScript(js.executorValue, listId);
@@ -121,6 +123,12 @@ ${consoleOverrides.join(",\n")}
 ${replaceConsoleMethods(wrapInTryCatch(script), listId)}
 })();
 `;
+}
+
+function scopeCss(css: string, htmlAreaId: string) {
+  // useId() generates ids with colons that need to be escaped for the CSS selector.
+  const id = htmlAreaId.replaceAll(":", "\\:");
+  return `#${id} { ${css} }`;
 }
 
 export { CodeExecutor };
