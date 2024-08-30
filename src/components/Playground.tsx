@@ -12,17 +12,17 @@ import TabList from '@mui/joy/TabList';
 import Tab from '@mui/joy/Tab';
 import TabPanel from '@mui/joy/TabPanel';
 import { CodeExecutor } from "./CodeExecutor";
+import { produce } from "immer";
 
 type PlaygroundProps = {
   languages: Record<Language, string>;
 };
 
-// TODO: Fix the state updates so this doesn't have to be Partial.
-type PlaygroundLanguageState = Partial<{
+type PlaygroundLanguageState = {
   header: string;
   initialEditorValue: string;
   executorValue: string;
-}>;
+};
 
 export type LanguageState = Record<Language, PlaygroundLanguageState>;
 
@@ -45,8 +45,6 @@ export default function Playground({ languages }: PlaygroundProps) {
   const [theme, setTheme] = useState<StarlightTheme>(getInitialTheme());
 
   function onResetEditors() {
-    const newState: Partial<LanguageState> = {};
-
     const languageNames = Object.keys(languages) as Array<Language>;
     for (const language of languageNames) {
       const view = editorRefs[language].current?.view;
@@ -57,26 +55,20 @@ export default function Playground({ languages }: PlaygroundProps) {
           insert: initialState[language].initialEditorValue,
         },
       });
-
-      newState[language] = {
-        executorValue: state[language].header! + state[language].initialEditorValue!
-      };
     }
 
-    setState((s) => ({
-      ...s,
-      ...newState,
+    setState(produce((s) => {
+      for (const language of languageNames) {
+        s[language].executorValue = s[language].header + s[language].initialEditorValue
+      }
     }));
   }
 
   useStarlightTheme(setTheme);
 
   const onEditorChange = useCallback((language: Language, newEditorScript: string) => {
-    setState((s) => ({
-      ...s,
-      [language]: {
-        executorValue: ((s[language].header ?? "") + newEditorScript).trim(),
-      },
+    setState(produce((s) => {
+      s[language].executorValue = (s[language].header + newEditorScript).trim()
     }));
   }, []);
 

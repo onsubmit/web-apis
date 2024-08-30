@@ -23,7 +23,7 @@ const consoleMethodClassMap: Record<SupportedConsoleMethod, string> = {
 
 const supportedConsoleMethodsRegExStr = supportedConsoleMethods.join("|");
 
-function CodeExecutor({ state, onResetEditors }: CodeExecutorProps) {
+function CodeExecutor({ state: { js, html, css }, onResetEditors }: CodeExecutorProps) {
   const listId = useId();
   const htmlAreaId = useId();
   const listRef = useRef<HTMLUListElement>(null);
@@ -48,10 +48,10 @@ function CodeExecutor({ state, onResetEditors }: CodeExecutorProps) {
     resetConsole();
 
     if (htmlAreaRef.current) {
-      htmlAreaRef.current.innerHTML = `<style>${state.css.executorValue!}</style>${state.html.executorValue!}`;
+      htmlAreaRef.current.innerHTML = `<style>${css.executorValue}</style>${html.executorValue}`;
     }
 
-    executeScript(state.js.executorValue!, listId);
+    executeScript(js.executorValue, listId);
   }
 
   function resetCode() {
