@@ -8,7 +8,7 @@ import styles from "./CodeExecutor.module.css";
 import type { LanguageState } from "./Playground";
 
 type CodeExecutorProps = {
-  state: LanguageState;
+  state: Partial<LanguageState>;
   onResetEditors: () => void;
 };
 
@@ -49,13 +49,23 @@ function CodeExecutor({ state: { js, html, css }, onResetEditors }: CodeExecutor
     resetConsole();
 
     if (htmlAreaRef.current) {
-      // The @scope CSS at-rule doesn't work in Firefox yet.
-      // https://bugzilla.mozilla.org/show_bug.cgi?id=1830512
-      htmlAreaRef.current.innerHTML = `<style>${scopeCss(css.executorValue, htmlAreaId)}</style>${html.executorValue}`;
+      let innerHTML = "";
+      if (html?.executorValue) {
+        if (css?.executorValue) {
+          // The @scope CSS at-rule doesn't work in Firefox yet.
+          // https://bugzilla.mozilla.org/show_bug.cgi?id=1830512
+          innerHTML += `<style>${scopeCss(css.executorValue, htmlAreaId)}</style>`;
+        }
+
+        innerHTML += html.executorValue;
+      }
+      htmlAreaRef.current.innerHTML = innerHTML;
       htmlAreaRef.current.style.display = "block";
     }
 
-    executeScript(js.executorValue, listId);
+    if (js?.executorValue) {
+      executeScript(js.executorValue, listId);
+    }
   }
 
   function resetCode() {
