@@ -56,7 +56,9 @@ function getMatchIndices(text, searchValue) {
 }
 
 function createRange(el, index, length) {
-  const range = new Range();
+  /// @codemirror/state exports a Range class that mysteriously
+  /// overrides window.Range but only in PROD build ¯\_(ツ)_/¯
+  const range = new window.Range();
   range.setStart(el, index);
   range.setEnd(el, index + length);
   return range;

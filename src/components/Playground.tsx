@@ -134,6 +134,11 @@ export default function Playground({ languages }: PlaygroundProps) {
 function getInitialLanguageState(languages: PlaygroundProps["languages"]): LanguageState {
   return (Object.entries(languages) as Array<[Language, string]>).reduce<LanguageState>(
     (accumulator, [language, script]) => {
+      if (language === "js") {
+        // Remove triple-slash comments
+        script = script.replaceAll(/^\s*\/{3}(.+?)(\r?\n)/gm, "");
+      }
+
       const split = script.split("// ___Begin visible code snippet___");
       const header = split.length === 2 ? split[0].trim() : "";
       const initialEditorValue = (split.length === 2 ? split[1] : split[0]).trim();
