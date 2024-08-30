@@ -86,7 +86,7 @@ function CodeExecutor({ state: { js, html, css }, onResetEditors }: CodeExecutor
   );
 }
 
-function replaceConsoleMethods(script: string, listId: string) {
+function replaceConsoleMethods(script: string) {
   function replacer(_match: string, method: string, message: string) {
     return `_console.${method}(${message})`;
   }
@@ -132,7 +132,7 @@ function getExecutableScript(script: string, listId: string): string {
     },
 ${consoleOverrides.join(",\n")}
   }
-${replaceConsoleMethods(wrapInTryCatch(script), listId)}
+${replaceConsoleMethods(wrapInTryCatch(script))}
 })();
 `;
 }
