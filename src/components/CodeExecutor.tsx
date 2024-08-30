@@ -5,10 +5,11 @@ import useStarlightTheme, {
   type StarlightTheme,
 } from "src/hooks/useStarlightTheme";
 import styles from "./CodeExecutor.module.css";
+import type { LanguageState } from "./Playground";
 
 type CodeExecutorProps = {
-  script: string;
-  onResetEditor: () => void;
+  state: Partial<LanguageState>;
+  onResetEditors: () => void;
 };
 
 const supportedConsoleMethods = ["log", "warn", "error", "debug"] as const;
@@ -22,9 +23,11 @@ const consoleMethodClassMap: Record<SupportedConsoleMethod, string> = {
 
 const supportedConsoleMethodsRegExStr = supportedConsoleMethods.join("|");
 
-function CodeExecutor({ script, onResetEditor }: CodeExecutorProps) {
+function CodeExecutor({ state: { js, html, css }, onResetEditors }: CodeExecutorProps) {
   const listId = useId();
+  const htmlAreaId = useId();
   const listRef = useRef<HTMLUListElement>(null);
+  const htmlAreaRef = useRef<HTMLDivElement>(null);
   const [theme, setTheme] = useState<StarlightTheme>(getInitialTheme());
 
   useStarlightTheme(setTheme);
@@ -35,14 +38,40 @@ function CodeExecutor({ script, onResetEditor }: CodeExecutorProps) {
     }
   }
 
+  function resetHtmlArea() {
+    if (htmlAreaRef.current) {
+      htmlAreaRef.current.innerHTML = "";
+      htmlAreaRef.current.style.display = "none";
+    }
+  }
+
   function runCode() {
     resetConsole();
-    executeScript(script, listId);
+
+    if (htmlAreaRef.current) {
+      let innerHTML = "";
+      if (html?.executorValue) {
+        if (css?.executorValue) {
+          // The @scope CSS at-rule doesn't work in Firefox yet.
+          // https://bugzilla.mozilla.org/show_bug.cgi?id=1830512
+          innerHTML += `<style>${scopeCss(css.executorValue, htmlAreaId)}</style>`;
+        }
+
+        innerHTML += html.executorValue;
+      }
+      htmlAreaRef.current.innerHTML = innerHTML;
+      htmlAreaRef.current.style.display = "block";
+    }
+
+    if (js?.executorValue) {
+      executeScript(js.executorValue, listId);
+    }
   }
 
   function resetCode() {
     resetConsole();
-    onResetEditor();
+    resetHtmlArea();
+    onResetEditors();
   }
 
   return (
@@ -51,6 +80,7 @@ function CodeExecutor({ script, onResetEditor }: CodeExecutorProps) {
         <button onClick={runCode}>Run code</button>
         <button onClick={resetCode}>Reset code</button>
       </div>
+      <div ref={htmlAreaRef} id={htmlAreaId} className={styles.htmlArea}></div>
       <ul ref={listRef} id={listId}></ul>
     </div>
   );
@@ -105,6 +135,12 @@ ${consoleOverrides.join(",\n")}
 ${replaceConsoleMethods(wrapInTryCatch(script), listId)}
 })();
 `;
+}
+
+function scopeCss(css: string, htmlAreaId: string) {
+  // useId() generates ids with colons that need to be escaped for the CSS selector.
+  const id = htmlAreaId.replaceAll(":", "\\:");
+  return `#${id} { ${css} }`;
 }
 
 export { CodeExecutor };
