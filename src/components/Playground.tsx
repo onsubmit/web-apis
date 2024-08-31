@@ -118,6 +118,8 @@ ${indentString(state.css.executorValue.trim(), 4)}
             2
           )
         );
+      } else {
+        document = document.replace(/[{]HEAD_AND_USER_CSS[}](\r?\n)/, "");
       }
 
       if (state.html) {
@@ -125,6 +127,8 @@ ${indentString(state.css.executorValue.trim(), 4)}
           "{USER_HTML}",
           indentString(state.html.executorValue.trim(), 4)
         );
+      } else {
+        document = document.replace(/[{]USER_HTML[}](\r?\n)/, "");
       }
 
       if (state.js) {
