@@ -1,16 +1,31 @@
+import ContentCopyIcon from "@mui/icons-material/ContentCopy";
+import CssIcon from "@mui/icons-material/Css";
+import HtmlIcon from "@mui/icons-material/Html";
+import JavascriptIcon from "@mui/icons-material/Javascript";
 import KeyboardArrowRight from "@mui/icons-material/KeyboardArrowRight";
 import ReplayIcon from "@mui/icons-material/Replay";
 import Box from "@mui/joy/Box";
 import Button from "@mui/joy/Button";
+import IconButton from "@mui/joy/IconButton";
 import classNames from "classnames";
 import { useId, useRef, useState } from "react";
 import useStarlightTheme, { getInitialTheme, type Theme } from "src/hooks/useStarlightTheme";
+import CodeActionSplitButton, { type CodeActionFn } from "./CodeActionSplitButton";
+import type { Language } from "./CodeEditor";
 import styles from "./CodeExecutor.module.css";
 import type { LanguageState } from "./Playground";
 
+const languageIconMap: Record<Language, React.ReactNode> = {
+  js: <JavascriptIcon />,
+  html: <HtmlIcon />,
+  css: <CssIcon />,
+};
+
 type CodeExecutorProps = {
   state: Partial<LanguageState>;
+  selectedLanguage: Language;
   onResetEditors: () => void;
+  onCodeAction: CodeActionFn;
 };
 
 const supportedConsoleMethods = ["log", "warn", "error", "debug"] as const;
@@ -24,7 +39,12 @@ const consoleMethodClassMap: Record<SupportedConsoleMethod, string> = {
 
 const supportedConsoleMethodsRegExStr = supportedConsoleMethods.join("|");
 
-function CodeExecutor({ state: { js, html, css }, onResetEditors }: CodeExecutorProps) {
+function CodeExecutor({
+  state: { js, html, css },
+  selectedLanguage,
+  onResetEditors,
+  onCodeAction,
+}: CodeExecutorProps) {
   const listId = useId();
   const htmlAreaId = useId();
   const listRef = useRef<HTMLUListElement>(null);
@@ -77,13 +97,29 @@ function CodeExecutor({ state: { js, html, css }, onResetEditors }: CodeExecutor
 
   return (
     <div className={classNames(styles.className, theme === "dark" ? styles.dark : styles.light)}>
-      <Box sx={{ display: "flex", gap: "0.5rem", flexWrap: "wrap" }}>
-        <Button onClick={runCode} startDecorator={<KeyboardArrowRight />}>
-          Run
-        </Button>
-        <Button onClick={resetCode} startDecorator={<ReplayIcon />} variant="soft" color="warning">
-          Reset
-        </Button>
+      <Box sx={{ display: "flex", justifyContent: "space-between" }}>
+        <Box>
+          <Button onClick={runCode} startDecorator={<KeyboardArrowRight />}>
+            Run
+          </Button>
+        </Box>
+        <Box sx={{ display: "flex", gap: "0.5rem", flexWrap: "wrap" }}>
+          <CodeActionSplitButton
+            action="Copy"
+            onCodeAction={onCodeAction}
+            actionIcon={<ContentCopyIcon />}
+            snippetIcon={languageIconMap[selectedLanguage]}
+          />
+          <IconButton
+            onClick={resetCode}
+            variant="soft"
+            color="warning"
+            aria-label="Reset code"
+            title="Reset"
+          >
+            <ReplayIcon />
+          </IconButton>
+        </Box>
       </Box>
       <div ref={htmlAreaRef} id={htmlAreaId} className={styles.htmlArea}></div>
       <ul ref={listRef} id={listId}></ul>

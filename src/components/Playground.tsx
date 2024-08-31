@@ -5,9 +5,11 @@ import Tabs from "@mui/joy/Tabs";
 import type { ReactCodeMirrorRef } from "@uiw/react-codemirror";
 import classNames from "classnames";
 import { produce } from "immer";
+import indentString from "indent-string";
 import { useCallback, useMemo, useRef, useState } from "react";
 import useStarlightTheme, { getInitialTheme, type Theme } from "src/hooks/useStarlightTheme";
-import CodeEditor, { type Language } from "./CodeEditor";
+import type { CodeAction, CodeActionContent } from "./CodeActionSplitButton";
+import CodeEditor, { isLanguage, type Language } from "./CodeEditor";
 import { CodeExecutor } from "./CodeExecutor";
 import JoyThemeProvider from "./JoyThemeProvider";
 import styles from "./Playground.module.css";
@@ -32,6 +34,7 @@ const languageNameMap: Record<Language, string> = {
 
 export default function Playground({ languages }: PlaygroundProps) {
   const initialState: LanguageState = useMemo(() => getInitialLanguageState(languages), []);
+  const [selectedLanguage, setSelectedLanguage] = useState<Language>(getFirstLanguage(languages));
 
   const editorRefs = {
     js: useRef<ReactCodeMirrorRef>(null),
@@ -79,6 +82,74 @@ export default function Playground({ languages }: PlaygroundProps) {
   const getEditorOnChangeCallback = (language: Language) => (newValue: string) =>
     onEditorChange(language, newValue);
 
+  function onCodeAction(action: CodeAction, content: CodeActionContent) {
+    switch (action) {
+      case "Copy": {
+        const code = content === "Snippet" ? getSnippet() : getDocument();
+        navigator.clipboard.writeText(code.trim()).catch((error) => console.error(error));
+      }
+    }
+
+    function getSnippet(): string {
+      return state[selectedLanguage].executorValue;
+    }
+
+    function getDocument(): string {
+      const template = `
+<html>
+{HEAD_AND_USER_CSS}
+  <body>
+{USER_HTML}
+{USER_SCRIPT}
+  </body>
+</html>`.trim();
+
+      let document = template;
+      if (state.css) {
+        document = document.replace(
+          "{HEAD_AND_USER_CSS}",
+          indentString(
+            `
+<head>
+  <style>
+${indentString(state.css.executorValue.trim(), 4)}
+  </style>
+</head>`.trim(),
+            2
+          )
+        );
+      }
+
+      if (state.html) {
+        document = document.replace(
+          "{USER_HTML}",
+          indentString(state.html.executorValue.trim(), 4)
+        );
+      }
+
+      if (state.js) {
+        document = document.replace(
+          "{USER_SCRIPT}",
+          indentString(
+            `
+<script>
+  (async () => {
+${indentString(state.js.executorValue.trim(), 4)}
+  })();
+</script>`.trim(),
+            4
+          )
+        );
+      }
+
+      return document;
+    }
+  }
+
+  function onLanguageTabChange(newLanguage: Language) {
+    setSelectedLanguage(newLanguage);
+  }
+
   function getEditors() {
     const languageNames = Object.keys(languages) as Array<Language>;
     const length = languageNames.length;
@@ -101,14 +172,26 @@ export default function Playground({ languages }: PlaygroundProps) {
     }
 
     return (
-      <Tabs size="lg">
+      <Tabs
+        size="lg"
+        defaultValue={selectedLanguage}
+        onChange={(_event, newLanguage) => {
+          if (!isLanguage(newLanguage)) {
+            throw new Error("Unknown language");
+          }
+
+          onLanguageTabChange(newLanguage);
+        }}
+      >
         <TabList>
           {(Object.keys(languages) as Array<Language>).map((language) => (
-            <Tab key={language}>{languageNameMap[language]}</Tab>
+            <Tab key={language} value={language}>
+              {languageNameMap[language]}
+            </Tab>
           ))}
         </TabList>
-        {(Object.keys(languages) as Array<Language>).map((language, index) => (
-          <TabPanel key={language} value={index} keepMounted={true}>
+        {(Object.keys(languages) as Array<Language>).map((language) => (
+          <TabPanel key={language} value={language} keepMounted={true}>
             <CodeEditor
               key={language}
               ref={editorRefs[language]}
@@ -127,10 +210,19 @@ export default function Playground({ languages }: PlaygroundProps) {
     <div className={classNames("not-content", styles.className)}>
       <JoyThemeProvider>
         {getEditors()}
-        <CodeExecutor state={state} onResetEditors={onResetEditors} />
+        <CodeExecutor state={state} {...{ selectedLanguage, onResetEditors, onCodeAction }} />
       </JoyThemeProvider>
     </div>
   );
+}
+
+function getFirstLanguage(languages: PlaygroundProps["languages"]): Language {
+  const languageNames = Object.keys(languages) as Array<Language>;
+  if (languageNames.length === 0) {
+    throw new Error("At least one language is required.");
+  }
+
+  return languageNames[0];
 }
 
 function getInitialLanguageState(languages: PlaygroundProps["languages"]): LanguageState {

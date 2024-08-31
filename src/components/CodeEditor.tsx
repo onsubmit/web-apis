@@ -7,7 +7,8 @@ import { vscodeDark, vscodeLight } from "@uiw/codemirror-theme-vscode";
 import { useCodeMirror, type ReactCodeMirrorRef } from "@uiw/react-codemirror";
 import { forwardRef, useEffect, useImperativeHandle, useRef } from "react";
 
-export type Language = "js" | "html" | "css";
+const languages = ["js", "html", "css"] as const;
+export type Language = (typeof languages)[number];
 
 type CodeEditorProps = {
   script: string;
@@ -60,6 +61,14 @@ function getLanguageExtension(language: Language): LanguageSupport {
     case "css":
       return css();
   }
+}
+
+export function isLanguage(value: unknown): value is Language {
+  if (typeof value !== "string") {
+    return false;
+  }
+
+  return languages.includes(value as Language);
 }
 
 export default CodeEditor;

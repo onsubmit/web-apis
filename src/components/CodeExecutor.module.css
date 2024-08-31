@@ -10,7 +10,7 @@
   }
 
   &.dark {
-    background: #000;
+    background: #08080a;
     color: #fff;
 
     li {
@@ -45,7 +45,7 @@
   }
 
   &.light {
-    background: #fff;
+    background: #f6f7fa;
     color: #000;
 
     li {
