@@ -1,6 +1,6 @@
 import { CssVarsProvider, useColorScheme } from "@mui/joy/styles";
-import type { ReactNode } from "react";
-import useStarlightTheme, { type Theme } from "src/hooks/useTheme";
+import { useEffect, type ReactNode } from "react";
+import useStarlightTheme, { getInitialTheme, type Theme } from "src/hooks/useTheme";
 
 type JoyThemeProviderProps = {
   children: ReactNode;
@@ -20,6 +20,10 @@ type JoyThemedComponentProps = {
 
 export function JoyThemedComponent({ children }: JoyThemedComponentProps) {
   const { setMode } = useColorScheme();
+
+  useEffect(() => {
+    setMode(getInitialTheme());
+  }, []);
 
   useStarlightTheme((newTheme: Theme) => {
     setMode(newTheme);
