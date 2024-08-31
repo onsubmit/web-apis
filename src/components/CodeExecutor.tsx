@@ -1,6 +1,6 @@
 import classNames from "classnames";
 import { useId, useRef, useState } from "react";
-import useTheme, { getInitialTheme, type Theme } from "src/hooks/useTheme";
+import useStarlightTheme, { getInitialTheme, type Theme } from "src/hooks/useTheme";
 import styles from "./CodeExecutor.module.css";
 import type { LanguageState } from "./Playground";
 
@@ -27,7 +27,7 @@ function CodeExecutor({ state: { js, html, css }, onResetEditors }: CodeExecutor
   const htmlAreaRef = useRef<HTMLDivElement>(null);
   const [theme, setTheme] = useState<Theme>(getInitialTheme());
 
-  useTheme(setTheme);
+  useStarlightTheme(setTheme);
 
   function resetConsole() {
     if (listRef.current) {

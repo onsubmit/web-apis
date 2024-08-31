@@ -1,4 +1,3 @@
-import { CssVarsProvider } from "@mui/joy/styles";
 import Tab from "@mui/joy/Tab";
 import TabList from "@mui/joy/TabList";
 import TabPanel from "@mui/joy/TabPanel";
@@ -8,9 +7,9 @@ import classNames from "classnames";
 import { produce } from "immer";
 import { useCallback, useMemo, useRef, useState } from "react";
 import useStarlightTheme, { getInitialTheme, type Theme } from "src/hooks/useTheme";
-import { getJoyTheme } from "src/joyTheme";
 import CodeEditor, { type Language } from "./CodeEditor";
 import { CodeExecutor } from "./CodeExecutor";
+import JoyThemeProvider from "./JoyThemeProvider";
 import styles from "./Playground.module.css";
 
 type PlaygroundProps = {
@@ -126,10 +125,10 @@ export default function Playground({ languages }: PlaygroundProps) {
 
   return (
     <div className={classNames("not-content", styles.className)}>
-      <CssVarsProvider theme={getJoyTheme(theme)}>
+      <JoyThemeProvider>
         {getEditors()}
         <CodeExecutor state={state} onResetEditors={onResetEditors} />
-      </CssVarsProvider>
+      </JoyThemeProvider>
     </div>
   );
 }
