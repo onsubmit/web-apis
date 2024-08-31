@@ -12,9 +12,11 @@ export default function useStarlightTheme(onThemeChange: (newTheme: Theme) => vo
 
     const themeChangeAbortController = new AbortController();
     document
-      .querySelector("starlight-theme-select select")
-      ?.addEventListener("change", handleThemeChange, {
-        signal: themeChangeAbortController.signal,
+      .querySelectorAll<HTMLSelectElement>("starlight-theme-select select")
+      .forEach((select) => {
+        select.addEventListener("change", handleThemeChange, {
+          signal: themeChangeAbortController.signal,
+        });
       });
 
     return () => themeChangeAbortController.abort();
