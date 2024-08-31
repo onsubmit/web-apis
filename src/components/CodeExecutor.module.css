@@ -4,11 +4,6 @@
   font-family: system-ui;
   font-size: 1rem;
 
-  .buttons {
-    display: inline-flex;
-    gap: 1rem;
-  }
-
   .htmlArea {
     margin-top: 1rem;
     display: none;

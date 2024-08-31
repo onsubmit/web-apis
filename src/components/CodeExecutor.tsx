@@ -1,3 +1,7 @@
+import KeyboardArrowRight from "@mui/icons-material/KeyboardArrowRight";
+import ReplayIcon from "@mui/icons-material/Replay";
+import Box from "@mui/joy/Box";
+import Button from "@mui/joy/Button";
 import classNames from "classnames";
 import { useId, useRef, useState } from "react";
 import useStarlightTheme, { getInitialTheme, type Theme } from "src/hooks/useStarlightTheme";
@@ -73,10 +77,14 @@ function CodeExecutor({ state: { js, html, css }, onResetEditors }: CodeExecutor
 
   return (
     <div className={classNames(styles.className, theme === "dark" ? styles.dark : styles.light)}>
-      <div className={styles.buttons}>
-        <button onClick={runCode}>Run code</button>
-        <button onClick={resetCode}>Reset code</button>
-      </div>
+      <Box sx={{ display: "flex", gap: "0.5rem", flexWrap: "wrap" }}>
+        <Button onClick={runCode} startDecorator={<KeyboardArrowRight />}>
+          Run
+        </Button>
+        <Button onClick={resetCode} startDecorator={<ReplayIcon />} variant="soft" color="warning">
+          Reset
+        </Button>
+      </Box>
       <div ref={htmlAreaRef} id={htmlAreaId} className={styles.htmlArea}></div>
       <ul ref={listRef} id={listId}></ul>
     </div>
