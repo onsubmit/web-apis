@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "astro dev",
     "start": "astro dev",
-    "build": "astro check && astro build",
+    "build": "cross-env NODE_OPTIONS=--max-old-space-size=8192 astro check && astro build",
     "preview": "astro preview",
     "astro": "astro"
   },
@@ -32,6 +32,7 @@
     "typescript": "^5.5.4"
   },
   "devDependencies": {
+    "cross-env": "^7.0.3",
     "typescript-plugin-css-modules": "^5.1.0"
   }
 }
