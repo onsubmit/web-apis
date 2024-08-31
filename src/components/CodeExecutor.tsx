@@ -97,7 +97,7 @@ function replaceConsoleMethods(script: string) {
   }
 
   const regex = new RegExp(
-    `console.(?<METHOD>${supportedConsoleMethodsRegExStr})\((?<LOG>.+?)\);`,
+    `console.(?<METHOD>${supportedConsoleMethodsRegExStr})[(](?<LOG>.+?)[)]`,
     "g"
   );
   return script.replaceAll(regex, replacer);
