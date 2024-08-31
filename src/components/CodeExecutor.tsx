@@ -1,6 +1,6 @@
 import classNames from "classnames";
 import { useId, useRef, useState } from "react";
-import useStarlightTheme, { getInitialTheme, type Theme } from "src/hooks/useTheme";
+import useStarlightTheme, { getInitialTheme, type Theme } from "src/hooks/useStarlightTheme";
 import styles from "./CodeExecutor.module.css";
 import type { LanguageState } from "./Playground";
 

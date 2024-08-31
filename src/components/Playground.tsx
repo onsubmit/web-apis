@@ -6,7 +6,7 @@ import type { ReactCodeMirrorRef } from "@uiw/react-codemirror";
 import classNames from "classnames";
 import { produce } from "immer";
 import { useCallback, useMemo, useRef, useState } from "react";
-import useStarlightTheme, { getInitialTheme, type Theme } from "src/hooks/useTheme";
+import useStarlightTheme, { getInitialTheme, type Theme } from "src/hooks/useStarlightTheme";
 import CodeEditor, { type Language } from "./CodeEditor";
 import { CodeExecutor } from "./CodeExecutor";
 import JoyThemeProvider from "./JoyThemeProvider";
