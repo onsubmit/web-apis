@@ -1,3 +1,4 @@
+import { CssVarsProvider } from "@mui/joy/styles";
 import Tab from "@mui/joy/Tab";
 import TabList from "@mui/joy/TabList";
 import TabPanel from "@mui/joy/TabPanel";
@@ -6,10 +7,8 @@ import type { ReactCodeMirrorRef } from "@uiw/react-codemirror";
 import classNames from "classnames";
 import { produce } from "immer";
 import { useCallback, useMemo, useRef, useState } from "react";
-import useStarlightTheme, {
-  getInitialTheme,
-  type StarlightTheme,
-} from "src/hooks/useStarlightTheme";
+import useStarlightTheme, { getInitialTheme, type Theme } from "src/hooks/useTheme";
+import { getJoyTheme } from "src/joyTheme";
 import CodeEditor, { type Language } from "./CodeEditor";
 import { CodeExecutor } from "./CodeExecutor";
 import styles from "./Playground.module.css";
@@ -42,7 +41,7 @@ export default function Playground({ languages }: PlaygroundProps) {
   };
 
   const [state, setState] = useState<LanguageState>(initialState);
-  const [theme, setTheme] = useState<StarlightTheme>(getInitialTheme());
+  const [theme, setTheme] = useState<Theme>(getInitialTheme());
 
   function onResetEditors() {
     const languageNames = Object.keys(languages) as Array<Language>;
@@ -66,7 +65,9 @@ export default function Playground({ languages }: PlaygroundProps) {
     );
   }
 
-  useStarlightTheme(setTheme);
+  useStarlightTheme((newTheme: Theme) => {
+    setTheme(newTheme);
+  });
 
   const onEditorChange = useCallback((language: Language, newEditorScript: string) => {
     setState(
@@ -125,8 +126,10 @@ export default function Playground({ languages }: PlaygroundProps) {
 
   return (
     <div className={classNames("not-content", styles.className)}>
-      {getEditors()}
-      <CodeExecutor state={state} onResetEditors={onResetEditors} />
+      <CssVarsProvider theme={getJoyTheme(theme)}>
+        {getEditors()}
+        <CodeExecutor state={state} onResetEditors={onResetEditors} />
+      </CssVarsProvider>
     </div>
   );
 }

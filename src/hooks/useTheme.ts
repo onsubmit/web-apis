@@ -1,12 +1,12 @@
-import { useEffect, type Dispatch, type SetStateAction } from "react";
+import { useEffect } from "react";
 
-export type StarlightTheme = "dark" | "light";
+export type Theme = "dark" | "light";
 
-export default function useStarlightTheme(setTheme: Dispatch<SetStateAction<StarlightTheme>>) {
+export default function useStarlightTheme(onThemeChange: (newTheme: Theme) => void) {
   return useEffect(() => {
     const handleThemeChange = (e: Event) => {
       if (e.currentTarget instanceof HTMLSelectElement) {
-        setTheme(parseTheme(e.currentTarget.value));
+        onThemeChange(parseTheme(e.currentTarget.value));
       }
     };
 
@@ -21,14 +21,14 @@ export default function useStarlightTheme(setTheme: Dispatch<SetStateAction<Star
   }, []);
 }
 
-export function getInitialTheme(): StarlightTheme {
+export function getInitialTheme(): Theme {
   const storedTheme =
     document.documentElement.dataset.theme || localStorage?.getItem("starlight-theme");
 
   return parseTheme(storedTheme);
 }
 
-function parseTheme(theme: unknown): StarlightTheme {
+function parseTheme(theme: unknown): Theme {
   if (theme === "dark" || theme === "light") {
     return theme;
   }
@@ -36,6 +36,6 @@ function parseTheme(theme: unknown): StarlightTheme {
   return getPreferredColorScheme();
 }
 
-function getPreferredColorScheme(): StarlightTheme {
+function getPreferredColorScheme(): Theme {
   return matchMedia("(prefers-color-scheme: light)").matches ? "light" : "dark";
 }

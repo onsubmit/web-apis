@@ -1,9 +1,6 @@
 import classNames from "classnames";
 import { useId, useRef, useState } from "react";
-import useStarlightTheme, {
-  getInitialTheme,
-  type StarlightTheme,
-} from "src/hooks/useStarlightTheme";
+import useTheme, { getInitialTheme, type Theme } from "src/hooks/useTheme";
 import styles from "./CodeExecutor.module.css";
 import type { LanguageState } from "./Playground";
 
@@ -28,9 +25,9 @@ function CodeExecutor({ state: { js, html, css }, onResetEditors }: CodeExecutor
   const htmlAreaId = useId();
   const listRef = useRef<HTMLUListElement>(null);
   const htmlAreaRef = useRef<HTMLDivElement>(null);
-  const [theme, setTheme] = useState<StarlightTheme>(getInitialTheme());
+  const [theme, setTheme] = useState<Theme>(getInitialTheme());
 
-  useStarlightTheme(setTheme);
+  useTheme(setTheme);
 
   function resetConsole() {
     if (listRef.current) {
