@@ -1,5 +1,5 @@
 if (!navigator.keyboard) {
-  console.error("Keyboard API not supported in this browser.");
+  console.error('Keyboard API not supported in this browser.');
   return;
 }
 

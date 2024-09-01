@@ -1,5 +1,5 @@
 if (!navigator.clearAppBadge) {
-  console.error("Badging API not supported in this browser.");
+  console.error('Badging API not supported in this browser.');
   return;
 }
 
@@ -7,4 +7,4 @@ if (!navigator.clearAppBadge) {
 
 await navigator.clearAppBadge();
 
-console.log("Badge contents cleared");
+console.log('Badge contents cleared');

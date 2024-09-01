@@ -1,19 +1,22 @@
-import DescriptionIcon from "@mui/icons-material/Description";
-import Dropdown from "@mui/joy/Dropdown";
-import IconButton from "@mui/joy/IconButton";
-import ListItemDecorator from "@mui/joy/ListItemDecorator";
-import Menu from "@mui/joy/Menu";
-import MenuButton from "@mui/joy/MenuButton";
-import MenuItem from "@mui/joy/MenuItem";
+import DescriptionIcon from '@mui/icons-material/Description';
+import Dropdown from '@mui/joy/Dropdown';
+import IconButton from '@mui/joy/IconButton';
+import ListItemDecorator from '@mui/joy/ListItemDecorator';
+import Menu from '@mui/joy/Menu';
+import MenuButton from '@mui/joy/MenuButton';
+import MenuItem from '@mui/joy/MenuItem';
 
-const options = ["Snippet", "Document"];
+const options = ['Snippet', 'Document'];
 
-export type CodeAction = "Copy";
+export type CodeAction = 'Copy';
 
-const codeActionContent = ["Snippet", "Document"] as const;
+const codeActionContent = ['Snippet', 'Document'] as const;
 export type CodeActionContent = (typeof codeActionContent)[number];
 
-export type CodeActionFn = (action: CodeAction, code: CodeActionContent) => void;
+export type CodeActionFn = (
+  action: CodeAction,
+  code: CodeActionContent
+) => void;
 type CodeActionSplitButtonProps = {
   actionIcon: React.ReactNode;
   snippetIcon: React.ReactNode;
@@ -38,7 +41,7 @@ export default function CodeActionSplitButton({
         aria-label={action}
         title={action}
         slots={{ root: IconButton }}
-        slotProps={{ root: { variant: "soft", color: "neutral" } }}
+        slotProps={{ root: { variant: 'soft', color: 'neutral' } }}
       >
         {actionIcon}
       </MenuButton>
@@ -51,7 +54,8 @@ export default function CodeActionSplitButton({
                 onCodeAction(action, c)
             )(content)}
           >
-            <ListItemDecorator>{contentIconMap[content]}</ListItemDecorator> {content}
+            <ListItemDecorator>{contentIconMap[content]}</ListItemDecorator>{' '}
+            {content}
           </MenuItem>
         ))}
       </Menu>

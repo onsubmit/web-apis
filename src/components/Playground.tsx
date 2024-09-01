@@ -1,18 +1,22 @@
-import Tab from "@mui/joy/Tab";
-import TabList from "@mui/joy/TabList";
-import TabPanel from "@mui/joy/TabPanel";
-import Tabs from "@mui/joy/Tabs";
-import type { ReactCodeMirrorRef } from "@uiw/react-codemirror";
-import classNames from "classnames";
-import { produce } from "immer";
-import indentString from "indent-string";
-import { useCallback, useMemo, useRef, useState } from "react";
-import useStarlightTheme, { getInitialTheme, type Theme } from "src/hooks/useStarlightTheme";
-import type { CodeAction, CodeActionContent } from "./CodeActionSplitButton";
-import CodeEditor, { isLanguage, type Language } from "./CodeEditor";
-import { CodeExecutor } from "./CodeExecutor";
-import JoyThemeProvider from "./JoyThemeProvider";
-import styles from "./Playground.module.css";
+import Tab from '@mui/joy/Tab';
+import TabList from '@mui/joy/TabList';
+import TabPanel from '@mui/joy/TabPanel';
+import Tabs from '@mui/joy/Tabs';
+import type { ReactCodeMirrorRef } from '@uiw/react-codemirror';
+import classNames from 'classnames';
+import { produce } from 'immer';
+import indentString from 'indent-string';
+import { useCallback, useMemo, useRef, useState } from 'react';
+import useStarlightTheme, {
+  getInitialTheme,
+  type Theme,
+} from 'src/hooks/useStarlightTheme';
+
+import type { CodeAction, CodeActionContent } from './CodeActionSplitButton';
+import CodeEditor, { isLanguage, type Language } from './CodeEditor';
+import { CodeExecutor } from './CodeExecutor';
+import JoyThemeProvider from './JoyThemeProvider';
+import styles from './Playground.module.css';
 
 type PlaygroundProps = {
   languages: Record<Language, string>;
@@ -27,14 +31,19 @@ type PlaygroundLanguageState = {
 export type LanguageState = Record<Language, PlaygroundLanguageState>;
 
 const languageNameMap: Record<Language, string> = {
-  js: "JavaScript",
-  html: "HTML",
-  css: "CSS",
+  js: 'JavaScript',
+  html: 'HTML',
+  css: 'CSS',
 };
 
 export default function Playground({ languages }: PlaygroundProps) {
-  const initialState: LanguageState = useMemo(() => getInitialLanguageState(languages), []);
-  const [selectedLanguage, setSelectedLanguage] = useState<Language>(getFirstLanguage(languages));
+  const initialState: LanguageState = useMemo(
+    () => getInitialLanguageState(languages),
+    []
+  );
+  const [selectedLanguage, setSelectedLanguage] = useState<Language>(
+    getFirstLanguage(languages)
+  );
 
   const editorRefs = {
     js: useRef<ReactCodeMirrorRef>(null),
@@ -61,7 +70,8 @@ export default function Playground({ languages }: PlaygroundProps) {
     setState(
       produce((s) => {
         for (const language of languageNames) {
-          s[language].executorValue = s[language].header + s[language].initialEditorValue;
+          s[language].executorValue =
+            s[language].header + s[language].initialEditorValue;
         }
       })
     );
@@ -71,22 +81,30 @@ export default function Playground({ languages }: PlaygroundProps) {
     setTheme(newTheme);
   });
 
-  const onEditorChange = useCallback((language: Language, newEditorScript: string) => {
-    setState(
-      produce((s) => {
-        s[language].executorValue = (s[language].header + newEditorScript).trim();
-      })
-    );
-  }, []);
+  const onEditorChange = useCallback(
+    (language: Language, newEditorScript: string) => {
+      setState(
+        produce((s) => {
+          s[language].executorValue = (
+            s[language].header + newEditorScript
+          ).trim();
+        })
+      );
+    },
+    []
+  );
 
-  const getEditorOnChangeCallback = (language: Language) => (newValue: string) =>
-    onEditorChange(language, newValue);
+  const getEditorOnChangeCallback =
+    (language: Language) => (newValue: string) =>
+      onEditorChange(language, newValue);
 
   function onCodeAction(action: CodeAction, content: CodeActionContent) {
     switch (action) {
-      case "Copy": {
-        const code = content === "Snippet" ? getSnippet() : getDocument();
-        navigator.clipboard.writeText(code.trim()).catch((error) => console.error(error));
+      case 'Copy': {
+        const code = content === 'Snippet' ? getSnippet() : getDocument();
+        navigator.clipboard
+          .writeText(code.trim())
+          .catch((error) => console.error(error));
       }
     }
 
@@ -107,7 +125,7 @@ export default function Playground({ languages }: PlaygroundProps) {
       let document = template;
       if (state.css) {
         document = document.replace(
-          "{HEAD_AND_USER_CSS}",
+          '{HEAD_AND_USER_CSS}',
           indentString(
             `
 <head>
@@ -119,21 +137,21 @@ ${indentString(state.css.executorValue.trim(), 4)}
           )
         );
       } else {
-        document = document.replace(/[{]HEAD_AND_USER_CSS[}](\r?\n)/, "");
+        document = document.replace(/[{]HEAD_AND_USER_CSS[}](\r?\n)/, '');
       }
 
       if (state.html) {
         document = document.replace(
-          "{USER_HTML}",
+          '{USER_HTML}',
           indentString(state.html.executorValue.trim(), 4)
         );
       } else {
-        document = document.replace(/[{]USER_HTML[}](\r?\n)/, "");
+        document = document.replace(/[{]USER_HTML[}](\r?\n)/, '');
       }
 
       if (state.js) {
         document = document.replace(
-          "{USER_SCRIPT}",
+          '{USER_SCRIPT}',
           indentString(
             `
 <script>
@@ -158,11 +176,11 @@ ${indentString(state.js.executorValue.trim(), 4)}
     const languageNames = Object.keys(languages) as Array<Language>;
     const length = languageNames.length;
     if (length === 0) {
-      throw new Error("At least one language is required.");
+      throw new Error('At least one language is required.');
     }
 
     if (length === 1) {
-      const language = languageNames[0];
+      const language = languageNames[0] ?? 'js';
       const script = initialState[language].initialEditorValue;
       return (
         <CodeEditor
@@ -181,7 +199,7 @@ ${indentString(state.js.executorValue.trim(), 4)}
         defaultValue={selectedLanguage}
         onChange={(_event, newLanguage) => {
           if (!isLanguage(newLanguage)) {
-            throw new Error("Unknown language");
+            throw new Error('Unknown language');
           }
 
           onLanguageTabChange(newLanguage);
@@ -211,40 +229,46 @@ ${indentString(state.js.executorValue.trim(), 4)}
   }
 
   return (
-    <div className={classNames("not-content", styles.className)}>
+    <div className={classNames('not-content', styles.className)}>
       <JoyThemeProvider>
         {getEditors()}
-        <CodeExecutor state={state} {...{ selectedLanguage, onResetEditors, onCodeAction }} />
+        <CodeExecutor
+          state={state}
+          {...{ selectedLanguage, onResetEditors, onCodeAction }}
+        />
       </JoyThemeProvider>
     </div>
   );
 }
 
-function getFirstLanguage(languages: PlaygroundProps["languages"]): Language {
+function getFirstLanguage(languages: PlaygroundProps['languages']): Language {
   const languageNames = Object.keys(languages) as Array<Language>;
-  if (languageNames.length === 0) {
-    throw new Error("At least one language is required.");
+  const language = languageNames[0];
+  if (!language) {
+    throw new Error('At least one language is required.');
   }
 
-  return languageNames[0];
+  return language;
 }
 
-function getInitialLanguageState(languages: PlaygroundProps["languages"]): LanguageState {
-  return (Object.entries(languages) as Array<[Language, string]>).reduce<LanguageState>(
-    (accumulator, [language, script]) => {
-      if (language === "js") {
-        // Remove triple-slash comments
-        script = script.replaceAll(/^\s*\/{3}(.+?)(\r?\n)/gm, "");
-      }
+function getInitialLanguageState(
+  languages: PlaygroundProps['languages']
+): LanguageState {
+  return (
+    Object.entries(languages) as Array<[Language, string]>
+  ).reduce<LanguageState>((accumulator, [language, script]) => {
+    if (language === 'js') {
+      // Remove triple-slash comments
+      script = script.replaceAll(/^\s*\/{3}(.+?)(\r?\n)/gm, '');
+    }
 
-      const split = script.split("// ___Begin visible code snippet___");
-      const header = split.length === 2 ? split[0].trim() : "";
-      const initialEditorValue = (split.length === 2 ? split[1] : split[0]).trim();
-      const executorValue = `${header}\n\n${initialEditorValue}`;
+    const split = script.split('// ___Begin visible code snippet___');
+    const header = split.length === 2 ? (split[0]?.trim() ?? '') : '';
+    const initialEditorValue =
+      (split.length === 2 ? split[1] : split[0])?.trim() ?? '';
+    const executorValue = `${header}\n\n${initialEditorValue}`;
 
-      accumulator[language] = { header, initialEditorValue, executorValue };
-      return accumulator;
-    },
-    {} as LanguageState
-  );
+    accumulator[language] = { header, initialEditorValue, executorValue };
+    return accumulator;
+  }, {} as LanguageState);
 }

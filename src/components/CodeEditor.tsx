@@ -1,18 +1,18 @@
-import { css } from "@codemirror/lang-css";
-import { html } from "@codemirror/lang-html";
-import { javascript } from "@codemirror/lang-javascript";
-import { LanguageSupport } from "@codemirror/language";
-import { EditorView } from "@codemirror/view";
-import { vscodeDark, vscodeLight } from "@uiw/codemirror-theme-vscode";
-import { useCodeMirror, type ReactCodeMirrorRef } from "@uiw/react-codemirror";
-import { forwardRef, useEffect, useImperativeHandle, useRef } from "react";
+import { css } from '@codemirror/lang-css';
+import { html } from '@codemirror/lang-html';
+import { javascript } from '@codemirror/lang-javascript';
+import { LanguageSupport } from '@codemirror/language';
+import { EditorView } from '@codemirror/view';
+import { vscodeDark, vscodeLight } from '@uiw/codemirror-theme-vscode';
+import { type ReactCodeMirrorRef, useCodeMirror } from '@uiw/react-codemirror';
+import { forwardRef, useEffect, useImperativeHandle, useRef } from 'react';
 
-const languages = ["js", "html", "css"] as const;
+const languages = ['js', 'html', 'css'] as const;
 export type Language = (typeof languages)[number];
 
 type CodeEditorProps = {
   script: string;
-  theme: "light" | "dark";
+  theme: 'light' | 'dark';
   language: Language;
   onChange: (newValue: string) => void;
 };
@@ -23,8 +23,8 @@ const CodeEditor = forwardRef<ReactCodeMirrorRef, CodeEditorProps>(
 
     const { state, container, setContainer, view } = useCodeMirror({
       container: editorRef.current,
-      theme: theme === "light" ? vscodeLight : vscodeDark,
-      maxHeight: "600px",
+      theme: theme === 'light' ? vscodeLight : vscodeDark,
+      maxHeight: '600px',
       extensions: [getLanguageExtension(language), EditorView.lineWrapping],
       value: script.trim(),
       onChange,
@@ -35,12 +35,11 @@ const CodeEditor = forwardRef<ReactCodeMirrorRef, CodeEditorProps>(
       },
     });
 
-    useImperativeHandle(ref, () => ({ editor: editorRef.current, state, view }), [
-      editorRef,
-      container,
-      state,
-      view,
-    ]);
+    useImperativeHandle(
+      ref,
+      () => ({ editor: editorRef.current, state, view }),
+      [editorRef, container, state, view]
+    );
 
     useEffect(() => {
       if (editorRef.current) {
@@ -54,17 +53,17 @@ const CodeEditor = forwardRef<ReactCodeMirrorRef, CodeEditorProps>(
 
 function getLanguageExtension(language: Language): LanguageSupport {
   switch (language) {
-    case "js":
+    case 'js':
       return javascript();
-    case "html":
+    case 'html':
       return html();
-    case "css":
+    case 'css':
       return css();
   }
 }
 
 export function isLanguage(value: unknown): value is Language {
-  if (typeof value !== "string") {
+  if (typeof value !== 'string') {
     return false;
   }
 

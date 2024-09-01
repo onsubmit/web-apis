@@ -1,8 +1,10 @@
-import { useEffect } from "react";
+import { useEffect } from 'react';
 
-export type Theme = "dark" | "light";
+export type Theme = 'dark' | 'light';
 
-export default function useStarlightTheme(onThemeChange: (newTheme: Theme) => void) {
+export default function useStarlightTheme(
+  onThemeChange: (newTheme: Theme) => void
+) {
   return useEffect(() => {
     const handleThemeChange = (e: Event) => {
       if (e.currentTarget instanceof HTMLSelectElement) {
@@ -12,9 +14,9 @@ export default function useStarlightTheme(onThemeChange: (newTheme: Theme) => vo
 
     const themeChangeAbortController = new AbortController();
     document
-      .querySelectorAll<HTMLSelectElement>("starlight-theme-select select")
+      .querySelectorAll<HTMLSelectElement>('starlight-theme-select select')
       .forEach((select) => {
-        select.addEventListener("change", handleThemeChange, {
+        select.addEventListener('change', handleThemeChange, {
           signal: themeChangeAbortController.signal,
         });
       });
@@ -25,13 +27,14 @@ export default function useStarlightTheme(onThemeChange: (newTheme: Theme) => vo
 
 export function getInitialTheme(): Theme {
   const storedTheme =
-    document.documentElement.dataset.theme || localStorage?.getItem("starlight-theme");
+    document.documentElement.dataset.theme ||
+    localStorage?.getItem('starlight-theme');
 
   return parseTheme(storedTheme);
 }
 
 function parseTheme(theme: unknown): Theme {
-  if (theme === "dark" || theme === "light") {
+  if (theme === 'dark' || theme === 'light') {
     return theme;
   }
 
@@ -39,5 +42,5 @@ function parseTheme(theme: unknown): Theme {
 }
 
 function getPreferredColorScheme(): Theme {
-  return matchMedia("(prefers-color-scheme: light)").matches ? "light" : "dark";
+  return matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
 }

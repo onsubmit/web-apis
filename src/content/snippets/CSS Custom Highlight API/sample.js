@@ -1,5 +1,5 @@
 if (!CSS.highlights) {
-  console.error("CSS Custom Highlight API not supported in this browser.");
+  console.error('CSS Custom Highlight API not supported in this browser.');
   return;
 }
 
@@ -7,8 +7,8 @@ if (!CSS.highlights) {
 
 const allTextNodes = getTextNodes();
 
-const query = document.getElementById("query");
-query.addEventListener("input", () => {
+const query = document.getElementById('query');
+query.addEventListener('input', () => {
   CSS.highlights.clear();
 
   const searchValue = query.value.trim().toLowerCase();
@@ -25,11 +25,11 @@ query.addEventListener("input", () => {
     );
 
   const highlight = new Highlight(...ranges);
-  CSS.highlights.set("search-results", highlight);
+  CSS.highlights.set('search-results', highlight);
 });
 
 function getTextNodes() {
-  const article = document.querySelector("article");
+  const article = document.querySelector('article');
   const treeWalker = document.createTreeWalker(article, NodeFilter.SHOW_TEXT);
   const allTextNodes = [];
   let currentNode = treeWalker.nextNode();

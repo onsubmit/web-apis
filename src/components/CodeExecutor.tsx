@@ -1,19 +1,25 @@
-import ContentCopyIcon from "@mui/icons-material/ContentCopy";
-import CssIcon from "@mui/icons-material/Css";
-import HtmlIcon from "@mui/icons-material/Html";
-import JavascriptIcon from "@mui/icons-material/Javascript";
-import KeyboardArrowRight from "@mui/icons-material/KeyboardArrowRight";
-import ReplayIcon from "@mui/icons-material/Replay";
-import Box from "@mui/joy/Box";
-import Button from "@mui/joy/Button";
-import IconButton from "@mui/joy/IconButton";
-import classNames from "classnames";
-import { useId, useRef, useState } from "react";
-import useStarlightTheme, { getInitialTheme, type Theme } from "src/hooks/useStarlightTheme";
-import CodeActionSplitButton, { type CodeActionFn } from "./CodeActionSplitButton";
-import type { Language } from "./CodeEditor";
-import styles from "./CodeExecutor.module.css";
-import type { LanguageState } from "./Playground";
+import ContentCopyIcon from '@mui/icons-material/ContentCopy';
+import CssIcon from '@mui/icons-material/Css';
+import HtmlIcon from '@mui/icons-material/Html';
+import JavascriptIcon from '@mui/icons-material/Javascript';
+import KeyboardArrowRight from '@mui/icons-material/KeyboardArrowRight';
+import ReplayIcon from '@mui/icons-material/Replay';
+import Box from '@mui/joy/Box';
+import Button from '@mui/joy/Button';
+import IconButton from '@mui/joy/IconButton';
+import classNames from 'classnames';
+import { useId, useRef, useState } from 'react';
+import useStarlightTheme, {
+  getInitialTheme,
+  type Theme,
+} from 'src/hooks/useStarlightTheme';
+
+import CodeActionSplitButton, {
+  type CodeActionFn,
+} from './CodeActionSplitButton';
+import type { Language } from './CodeEditor';
+import styles from './CodeExecutor.module.css';
+import type { LanguageState } from './Playground';
 
 const languageIconMap: Record<Language, React.ReactNode> = {
   js: <JavascriptIcon />,
@@ -28,16 +34,16 @@ type CodeExecutorProps = {
   onCodeAction: CodeActionFn;
 };
 
-const supportedConsoleMethods = ["log", "warn", "error", "debug"] as const;
+const supportedConsoleMethods = ['log', 'warn', 'error', 'debug'] as const;
 type SupportedConsoleMethod = (typeof supportedConsoleMethods)[number];
 const consoleMethodClassMap: Record<SupportedConsoleMethod, string> = {
-  log: "",
+  log: '',
   warn: styles.warn,
   error: styles.error,
   debug: styles.debug,
 };
 
-const supportedConsoleMethodsRegExStr = supportedConsoleMethods.join("|");
+const supportedConsoleMethodsRegExStr = supportedConsoleMethods.join('|');
 
 function CodeExecutor({
   state: { js, html, css },
@@ -55,14 +61,14 @@ function CodeExecutor({
 
   function resetConsole() {
     if (listRef.current) {
-      listRef.current.innerHTML = "";
+      listRef.current.innerHTML = '';
     }
   }
 
   function resetHtmlArea() {
     if (htmlAreaRef.current) {
-      htmlAreaRef.current.innerHTML = "";
-      htmlAreaRef.current.style.display = "none";
+      htmlAreaRef.current.innerHTML = '';
+      htmlAreaRef.current.style.display = 'none';
     }
   }
 
@@ -70,7 +76,7 @@ function CodeExecutor({
     resetConsole();
 
     if (htmlAreaRef.current) {
-      let innerHTML = "";
+      let innerHTML = '';
       if (html?.executorValue) {
         if (css?.executorValue) {
           // The @scope CSS at-rule doesn't work in Firefox yet.
@@ -81,7 +87,7 @@ function CodeExecutor({
         innerHTML += html.executorValue;
       }
       htmlAreaRef.current.innerHTML = innerHTML;
-      htmlAreaRef.current.style.display = "block";
+      htmlAreaRef.current.style.display = 'block';
     }
 
     if (js?.executorValue) {
@@ -96,14 +102,19 @@ function CodeExecutor({
   }
 
   return (
-    <div className={classNames(styles.className, theme === "dark" ? styles.dark : styles.light)}>
-      <Box sx={{ display: "flex", justifyContent: "space-between" }}>
+    <div
+      className={classNames(
+        styles.className,
+        theme === 'dark' ? styles.dark : styles.light
+      )}
+    >
+      <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
         <Box>
           <Button onClick={runCode} startDecorator={<KeyboardArrowRight />}>
             Run
           </Button>
         </Box>
-        <Box sx={{ display: "flex", gap: "0.5rem", flexWrap: "wrap" }}>
+        <Box sx={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap' }}>
           <CodeActionSplitButton
             action="Copy"
             onCodeAction={onCodeAction}
@@ -134,7 +145,7 @@ function replaceConsoleMethods(script: string) {
 
   const regex = new RegExp(
     `console.(?<METHOD>${supportedConsoleMethodsRegExStr})[(](?<LOG>.+?)[)]`,
-    "g"
+    'g'
   );
   return script.replaceAll(regex, replacer);
 }
@@ -156,7 +167,8 @@ function executeScript(script: string, listId: string) {
 
 function getExecutableScript(script: string, listId: string): string {
   const consoleOverrides = supportedConsoleMethods.map(
-    (m) => `    ${m}: (message) => _console._log("${m}", message, "${consoleMethodClassMap[m]}")`
+    (m) =>
+      `    ${m}: (message) => _console._log("${m}", message, "${consoleMethodClassMap[m]}")`
   );
 
   return `
@@ -171,7 +183,7 @@ function getExecutableScript(script: string, listId: string): string {
       list.scrollTop = list.scrollHeight;
       console[method](message);
     },
-${consoleOverrides.join(",\n")}
+${consoleOverrides.join(',\n')}
   }
 ${replaceConsoleMethods(wrapInTryCatch(script))}
 })();
@@ -180,7 +192,7 @@ ${replaceConsoleMethods(wrapInTryCatch(script))}
 
 function scopeCss(css: string, htmlAreaId: string) {
   // useId() generates ids with colons that need to be escaped for the CSS selector.
-  const id = htmlAreaId.replaceAll(":", "\\:");
+  const id = htmlAreaId.replaceAll(':', '\\:');
   return `#${id} { ${css} }`;
 }
 

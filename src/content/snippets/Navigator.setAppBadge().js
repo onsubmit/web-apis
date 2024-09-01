@@ -1,5 +1,5 @@
 if (!navigator.setAppBadge) {
-  console.error("Badging API not supported in this browser.");
+  console.error('Badging API not supported in this browser.');
   return;
 }
 

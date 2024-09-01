@@ -1,12 +1,12 @@
 if (!window.BroadcastChannel) {
-  console.error("BroadcastChannel not supported in this browser.");
+  console.error('BroadcastChannel not supported in this browser.');
   return;
 }
 
 // ___Begin visible code snippet___
 
-const channel = new BroadcastChannel("my-channel");
-console.log("Broadcast channel created.");
+const channel = new BroadcastChannel('my-channel');
+console.log('Broadcast channel created.');
 
 let count = 0;
 const interval = setInterval(() => {
@@ -17,7 +17,7 @@ const interval = setInterval(() => {
       timestamp: new Date().toUTCString(),
     });
   } else {
-    console.log("Stopped sending messages...");
+    console.log('Stopped sending messages...');
     clearInterval(interval);
     channel.close();
   }

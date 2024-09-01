@@ -1,16 +1,16 @@
 if (!window.BroadcastChannel) {
-  console.error("BroadcastChannel not supported in this browser.");
+  console.error('BroadcastChannel not supported in this browser.');
   return;
 }
 
 // ___Begin visible code snippet___
 
-console.log("Receiver 2: listening for messages...");
+console.log('Receiver 2: listening for messages...');
 
-const channel = new BroadcastChannel("my-channel");
+const channel = new BroadcastChannel('my-channel');
 
-channel.addEventListener("message", (event) => {
-  console.log("Receiver 2: Message received");
+channel.addEventListener('message', (event) => {
+  console.log('Receiver 2: Message received');
   console.debug(JSON.stringify(getMessageEvent(event), null, 2));
 });
 
