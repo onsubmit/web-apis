@@ -13,11 +13,11 @@ import useStarlightTheme, {
   getInitialTheme,
   type Theme,
 } from 'src/hooks/useStarlightTheme';
+import type { Language } from 'src/utils/language';
 
 import CodeActionSplitButton, {
   type CodeActionFn,
 } from './CodeActionSplitButton';
-import type { Language } from './CodeEditor';
 import styles from './CodeExecutor.module.css';
 import type { LanguageState } from './Playground';
 
@@ -36,7 +36,10 @@ type CodeExecutorProps = {
 
 const supportedConsoleMethods = ['log', 'warn', 'error', 'debug'] as const;
 type SupportedConsoleMethod = (typeof supportedConsoleMethods)[number];
-const consoleMethodClassMap: Record<SupportedConsoleMethod, string> = {
+const consoleMethodClassMap: Record<
+  SupportedConsoleMethod,
+  string | undefined
+> = {
   log: '',
   warn: styles.warn,
   error: styles.error,
