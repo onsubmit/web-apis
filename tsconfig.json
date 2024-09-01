@@ -4,6 +4,13 @@
     "baseUrl": ".",
     "jsx": "react-jsx",
     "jsxImportSource": "react",
+
+    "strict": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noFallthroughCasesInSwitch": true,
+    "noUncheckedIndexedAccess": true,
+
     "plugins": [{ "name": "typescript-plugin-css-modules" }],
     "paths": {
       "@components/*": ["src/components/*"],
