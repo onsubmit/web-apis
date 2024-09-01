@@ -11,9 +11,10 @@ import useStarlightTheme, {
   getInitialTheme,
   type Theme,
 } from 'src/hooks/useStarlightTheme';
+import { isLanguage, type Language } from 'src/utils/language';
 
 import type { CodeAction, CodeActionContent } from './CodeActionSplitButton';
-import CodeEditor, { isLanguage, type Language } from './CodeEditor';
+import CodeEditor from './CodeEditor';
 import { CodeExecutor } from './CodeExecutor';
 import JoyThemeProvider from './JoyThemeProvider';
 import styles from './Playground.module.css';
@@ -39,7 +40,7 @@ const languageNameMap: Record<Language, string> = {
 export default function Playground({ languages }: PlaygroundProps) {
   const initialState: LanguageState = useMemo(
     () => getInitialLanguageState(languages),
-    []
+    [languages]
   );
   const [selectedLanguage, setSelectedLanguage] = useState<Language>(
     getFirstLanguage(languages)
@@ -260,6 +261,12 @@ function getInitialLanguageState(
     if (language === 'js') {
       // Remove triple-slash comments
       script = script.replaceAll(/^\s*\/{3}(.+?)(\r?\n)/gm, '');
+
+      // Remove eslint-ignore comments
+      script = script.replaceAll(
+        /^\s*\/\/ eslint-disable-next-line(.+?)(\r?\n)/gm,
+        ''
+      );
     }
 
     const split = script.split('// ___Begin visible code snippet___');

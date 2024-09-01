@@ -6,9 +6,7 @@ import { EditorView } from '@codemirror/view';
 import { vscodeDark, vscodeLight } from '@uiw/codemirror-theme-vscode';
 import { type ReactCodeMirrorRef, useCodeMirror } from '@uiw/react-codemirror';
 import { forwardRef, useEffect, useImperativeHandle, useRef } from 'react';
-
-const languages = ['js', 'html', 'css'] as const;
-export type Language = (typeof languages)[number];
+import type { Language } from 'src/utils/language';
 
 type CodeEditorProps = {
   script: string;
@@ -21,7 +19,7 @@ const CodeEditor = forwardRef<ReactCodeMirrorRef, CodeEditorProps>(
   ({ script, theme, language, onChange }, ref) => {
     const editorRef = useRef<HTMLDivElement>(null);
 
-    const { state, container, setContainer, view } = useCodeMirror({
+    const { state, setContainer, view } = useCodeMirror({
       container: editorRef.current,
       theme: theme === 'light' ? vscodeLight : vscodeDark,
       maxHeight: '600px',
@@ -38,14 +36,14 @@ const CodeEditor = forwardRef<ReactCodeMirrorRef, CodeEditorProps>(
     useImperativeHandle(
       ref,
       () => ({ editor: editorRef.current, state, view }),
-      [editorRef, container, state, view]
+      [editorRef, state, view]
     );
 
     useEffect(() => {
       if (editorRef.current) {
         setContainer(editorRef.current);
       }
-    }, [editorRef.current]);
+    }, [setContainer]);
 
     return <div ref={editorRef} />;
   }
@@ -62,12 +60,5 @@ function getLanguageExtension(language: Language): LanguageSupport {
   }
 }
 
-export function isLanguage(value: unknown): value is Language {
-  if (typeof value !== 'string') {
-    return false;
-  }
-
-  return languages.includes(value as Language);
-}
-
+CodeEditor.displayName = 'CodeEditor';
 export default CodeEditor;

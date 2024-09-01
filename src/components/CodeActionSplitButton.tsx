@@ -6,8 +6,6 @@ import Menu from '@mui/joy/Menu';
 import MenuButton from '@mui/joy/MenuButton';
 import MenuItem from '@mui/joy/MenuItem';
 
-const options = ['Snippet', 'Document'];
-
 export type CodeAction = 'Copy';
 
 const codeActionContent = ['Snippet', 'Document'] as const;

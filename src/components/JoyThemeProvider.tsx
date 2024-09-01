@@ -28,7 +28,7 @@ export function JoyThemedComponent({ children }: JoyThemedComponentProps) {
 
   useEffect(() => {
     setMode(getInitialTheme());
-  }, []);
+  }, [setMode]);
 
   useStarlightTheme((newTheme: Theme) => {
     setMode(newTheme);

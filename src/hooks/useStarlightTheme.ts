@@ -22,7 +22,7 @@ export default function useStarlightTheme(
       });
 
     return () => themeChangeAbortController.abort();
-  }, []);
+  }, [onThemeChange]);
 }
 
 export function getInitialTheme(): Theme {

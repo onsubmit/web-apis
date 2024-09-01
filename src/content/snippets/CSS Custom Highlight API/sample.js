@@ -24,6 +24,7 @@ query.addEventListener('input', () => {
       )
     );
 
+  // eslint-disable-next-line no-undef
   const highlight = new Highlight(...ranges);
   CSS.highlights.set('search-results', highlight);
 });

@@ -9,6 +9,9 @@ module.exports = {
     sourceType: 'module',
   },
   settings: {
+    'react': {
+      version: 'detect'
+    },
     'import/resolver': {
       node: {
         paths: ['src'],
