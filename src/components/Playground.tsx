@@ -267,6 +267,8 @@ function getInitialLanguageState(
         /^\s*\/\/ eslint-disable-next-line(.+?)(\r?\n)/gm,
         ''
       );
+
+      script = script.replaceAll(/^\/\* eslint-disable(.+?)\*\/(\r?\n)/gm, '');
     }
 
     const split = script.split('// ___Begin visible code snippet___');
