@@ -2,7 +2,7 @@
 title: Channel Messaging API
 ---
 
-import { Aside, LinkCard, TabItem, Tabs } from '@astrojs/starlight/components';
+import { LinkCard, TabItem, Tabs } from '@astrojs/starlight/components';
 import Playground from '@components/Playground';
 import PlaygroundSet from '@components/PlaygroundSet';
 import receiver_css from '@snippets/Channel Messaging API/receiver.css?raw';
@@ -19,13 +19,6 @@ The Channel Messaging API allows two separate scripts running in different brows
   href="https://developer.mozilla.org/en-US/docs/Web/API/Channel_Messaging_API"
   target="_blank"
 />
-
-<Aside type="caution">
-  Be sure to run the code on each tab below!
-
-The **Sender** tab sends the messages and the **Receiver** tab receives them!
-
-</Aside>
 
 <PlaygroundSet
   client:only="react"
@@ -57,19 +50,3 @@ The **Sender** tab sends the messages and the **Receiver** tab receives them!
     },
   }}
 />
-{/*
-<Tabs>
-  <TabItem label="Sender" icon="rss">
-    <Playground
-      client:only="react"
-      languages={{
-        js: sender_js,
-        html: sender_html,
-        css: sender_css,
-      }}
-    />
-  </TabItem>
-  <TabItem label="Receiver">
-    <Playground client:only="react" languages={{ html: receiver_html }} />
-  </TabItem>
-</Tabs> */}
