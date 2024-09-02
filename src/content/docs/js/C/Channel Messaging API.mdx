@@ -1,0 +1,52 @@
+---
+title: Channel Messaging API
+---
+
+import { LinkCard, TabItem, Tabs } from '@astrojs/starlight/components';
+import Playground from '@components/Playground';
+import PlaygroundSet from '@components/PlaygroundSet';
+import receiver_css from '@snippets/Channel Messaging API/receiver.css?raw';
+import receiver_html from '@snippets/Channel Messaging API/receiver.html?raw';
+import receiver_js from '@snippets/Channel Messaging API/receiver.js?raw';
+import sender_css from '@snippets/Channel Messaging API/sender.css?raw';
+import sender_html from '@snippets/Channel Messaging API/sender.html?raw';
+import sender_js from '@snippets/Channel Messaging API/sender.js?raw';
+
+The Channel Messaging API allows two separate scripts running in different browsing contexts attached to the same document to communicate directly, passing messages between one another through two-way channels with a port at each end.
+
+<LinkCard
+  title="Channel Messaging API - Web APIs | MDN"
+  href="https://developer.mozilla.org/en-US/docs/Web/API/Channel_Messaging_API"
+  target="_blank"
+/>
+
+<PlaygroundSet
+  client:only="react"
+  playgroundPropsArr={[
+    {
+      id: 'sender.html',
+      languages: {
+        js: sender_js,
+        html: sender_html,
+        css: sender_css,
+      },
+    },
+    {
+      id: 'receiver.html',
+      preventRun: true,
+      languages: {
+        js: receiver_js,
+        html: receiver_html,
+        css: receiver_css,
+      },
+    },
+  ]}
+  options={{
+    type: 'replaceIframe',
+    config: {
+      sourceId: 'receiver.html',
+      targetId: 'sender.html',
+      iframeSrc: 'receiver.html',
+    },
+  }}
+/>

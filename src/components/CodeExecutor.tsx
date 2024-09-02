@@ -32,6 +32,7 @@ type CodeExecutorProps = {
   selectedLanguage: Language;
   onResetEditors: () => void;
   onCodeAction: CodeActionFn;
+  preventRun?: boolean;
 };
 
 const supportedConsoleMethods = ['log', 'warn', 'error', 'debug'] as const;
@@ -53,6 +54,7 @@ function CodeExecutor({
   selectedLanguage,
   onResetEditors,
   onCodeAction,
+  preventRun,
 }: CodeExecutorProps) {
   const listId = useId();
   const htmlAreaId = useId();
@@ -80,21 +82,22 @@ function CodeExecutor({
 
     if (htmlAreaRef.current) {
       let innerHTML = '';
-      if (html?.executorValue) {
-        if (css?.executorValue) {
+      if (html?.getExecutorValue()) {
+        if (css?.getExecutorValue()) {
           // The @scope CSS at-rule doesn't work in Firefox yet.
           // https://bugzilla.mozilla.org/show_bug.cgi?id=1830512
-          innerHTML += `<style>${scopeCss(css.executorValue, htmlAreaId)}</style>`;
+          innerHTML += `<style>${scopeCss(css.getExecutorValue(), htmlAreaId)}</style>`;
         }
 
-        innerHTML += html.executorValue;
+        innerHTML += html.getExecutorValue();
       }
       htmlAreaRef.current.innerHTML = innerHTML;
       htmlAreaRef.current.style.display = 'block';
     }
 
-    if (js?.executorValue) {
-      executeScript(js.executorValue, listId);
+    const jsExecutorValue = js?.getExecutorValue();
+    if (jsExecutorValue) {
+      executeScript(jsExecutorValue, listId);
     }
   }
 
@@ -113,9 +116,11 @@ function CodeExecutor({
     >
       <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
         <Box>
-          <Button onClick={runCode} startDecorator={<KeyboardArrowRight />}>
-            Run
-          </Button>
+          {preventRun ? null : (
+            <Button onClick={runCode} startDecorator={<KeyboardArrowRight />}>
+              Run
+            </Button>
+          )}
         </Box>
         <Box sx={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap' }}>
           <CodeActionSplitButton
