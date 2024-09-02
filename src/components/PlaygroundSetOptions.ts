@@ -70,10 +70,12 @@ function replaceIframeHandler({
   const css = playground.getSnippet('css');
 
   if (html) {
+    iframeSrcDoc += `<html><head><meta name='color-scheme' content='light dark'>`;
     if (css) {
       iframeSrcDoc += `<style>${css}</style>`;
     }
 
+    iframeSrcDoc += '</head><body>';
     iframeSrcDoc += html.trim();
   }
 
@@ -87,6 +89,9 @@ function replaceIframeHandler({
 </script>`;
   }
 
+  iframeSrcDoc += '</body></html>';
+
+  // TODO: Fix quote handling
   return executorValue.replace(
     `<iframe src="${config.iframeSrc}"`,
     `<iframe srcdoc="${iframeSrcDoc.trim()}"`

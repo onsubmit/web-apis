@@ -1,4 +1,7 @@
 iframe {
-  width: 100%;
-  max-height: 300px;
+  margin: 1rem;
+  width: calc(100% - 2rem);
+  border: 1px solid #d9e6ff;
+  background-color: transparent;
+  color: #666;
 }

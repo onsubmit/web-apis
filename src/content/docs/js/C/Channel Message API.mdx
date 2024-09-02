@@ -5,6 +5,7 @@ title: Channel Message API
 import { Aside, LinkCard, TabItem, Tabs } from '@astrojs/starlight/components';
 import Playground from '@components/Playground';
 import PlaygroundSet from '@components/PlaygroundSet';
+import receiver_css from '@snippets/Channel Messaging API/receiver.css?raw';
 import receiver_html from '@snippets/Channel Messaging API/receiver.html?raw';
 import receiver_js from '@snippets/Channel Messaging API/receiver.js?raw';
 import sender_css from '@snippets/Channel Messaging API/sender.css?raw';
@@ -42,6 +43,7 @@ The **Sender** tab sends the messages and the **Receiver** tab receives them!
       languages: {
         js: receiver_js,
         html: receiver_html,
+        css: receiver_css,
       },
     },
   ]}
