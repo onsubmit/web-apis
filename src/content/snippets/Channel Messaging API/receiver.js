@@ -6,7 +6,7 @@ if (!window.MessageChannel) {
 // ___Begin visible code snippet___
 
 let port2;
-const list = document.querySelector('ul#receiverList');
+const list = document.querySelector('ol#receiverList');
 
 window.addEventListener('message', (e) => {
   if (e.ports[0]) {

@@ -31,7 +31,7 @@ The **Sender** tab sends the messages and the **Receiver** tab receives them!
   client:only="react"
   playgroundPropsArr={[
     {
-      id: 'Sender',
+      id: 'sender.html',
       languages: {
         js: sender_js,
         html: sender_html,
@@ -39,7 +39,7 @@ The **Sender** tab sends the messages and the **Receiver** tab receives them!
       },
     },
     {
-      id: 'Receiver',
+      id: 'receiver.html',
       preventRun: true,
       languages: {
         js: receiver_js,
@@ -51,8 +51,8 @@ The **Sender** tab sends the messages and the **Receiver** tab receives them!
   options={{
     type: 'replaceIframe',
     config: {
-      sourceId: 'Receiver',
-      targetId: 'Sender',
+      sourceId: 'receiver.html',
+      targetId: 'sender.html',
       iframeSrc: 'receiver.html',
     },
   }}

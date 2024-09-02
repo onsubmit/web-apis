@@ -32,6 +32,7 @@ type CodeExecutorProps = {
   selectedLanguage: Language;
   onResetEditors: () => void;
   onCodeAction: CodeActionFn;
+  preventRun?: boolean;
 };
 
 const supportedConsoleMethods = ['log', 'warn', 'error', 'debug'] as const;
@@ -53,6 +54,7 @@ function CodeExecutor({
   selectedLanguage,
   onResetEditors,
   onCodeAction,
+  preventRun,
 }: CodeExecutorProps) {
   const listId = useId();
   const htmlAreaId = useId();
@@ -114,9 +116,11 @@ function CodeExecutor({
     >
       <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
         <Box>
-          <Button onClick={runCode} startDecorator={<KeyboardArrowRight />}>
-            Run
-          </Button>
+          {preventRun ? null : (
+            <Button onClick={runCode} startDecorator={<KeyboardArrowRight />}>
+              Run
+            </Button>
+          )}
         </Box>
         <Box sx={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap' }}>
           <CodeActionSplitButton

@@ -4,4 +4,6 @@ iframe {
   border: 1px solid #d9e6ff;
   background-color: transparent;
   color: #666;
+  min-height: 400px;
+  max-height: 600px;
 }

@@ -1,20 +1,4 @@
-* {
-  margin: 0;
-  padding: 0;
-}
-
 body {
   font-family: system-ui;
   margin: 1rem;
-}
-
-h3, h4 {
-  margin: 1rem;
-}
-
-ul {
-  margin: 0 !important;
-  padding: 0 !important;
-  list-style: none;
-  white-space: pre-wrap;
 }

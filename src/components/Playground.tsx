@@ -224,12 +224,11 @@ const Playground = forwardRef<PlaygroundRef, PlaygroundProps>(
       >
         <JoyThemeProvider>
           {getEditors()}
-          {preventRun ? null : (
-            <CodeExecutor
-              state={state}
-              {...{ selectedLanguage, onResetEditors, onCodeAction }}
-            />
-          )}
+          <CodeExecutor
+            state={state}
+            preventRun={preventRun}
+            {...{ selectedLanguage, onResetEditors, onCodeAction }}
+          />
         </JoyThemeProvider>
       </div>
     );
