@@ -1,5 +1,5 @@
-import updateIframeSrcDocFromSnippet from 'src/utils/codeUpdaters/updateIframeSrcDocFromSnippet';
 import type { Language } from 'src/utils/language';
+import updateIframeSrcDocFromSnippet from 'src/utils/updateIframeSrcDocFromSnippet';
 
 import Playground, {
   type PlaygroundProps,
