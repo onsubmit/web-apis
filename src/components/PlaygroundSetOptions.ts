@@ -1,3 +1,4 @@
+import { getInitialTheme } from 'src/hooks/useStarlightTheme';
 import type { Language } from 'src/utils/language';
 
 import type { PlaygroundRef } from './Playground';
@@ -70,9 +71,14 @@ function replaceIframeHandler({
   const css = playground.getSnippet('css');
 
   if (html) {
-    iframeSrcDoc += `<html><head><meta name='color-scheme' content='light dark'>`;
+    iframeSrcDoc += `<html class='theme-${getInitialTheme()}'><head><meta name='color-scheme' content='light dark'>`;
     if (css) {
-      iframeSrcDoc += `<style>${css}</style>`;
+      iframeSrcDoc += `
+<style>
+  :root.theme-dark { color-scheme: dark }
+  :root.theme-light { color-scheme: light }
+  ${css}
+</style>`;
     }
 
     iframeSrcDoc += '</head><body>';
