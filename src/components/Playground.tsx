@@ -35,6 +35,8 @@ type OnBeforeRunCode = (
 export type PlaygroundProps = {
   id: string;
   languages: Record<Language, string>;
+  isPartOfSet?: boolean;
+  preventRun?: boolean;
   onBeforeRunCode?: OnBeforeRunCode;
 };
 
@@ -58,7 +60,7 @@ export type PlaygroundRef = {
 };
 
 const Playground = forwardRef<PlaygroundRef, PlaygroundProps>(
-  ({ id, languages, onBeforeRunCode }, ref) => {
+  ({ id, languages, isPartOfSet, preventRun, onBeforeRunCode }, ref) => {
     const initialState: LanguageState = useMemo(
       () => getInitialLanguageState(id, languages, onBeforeRunCode),
       [id, languages, onBeforeRunCode]
@@ -170,7 +172,7 @@ const Playground = forwardRef<PlaygroundRef, PlaygroundProps>(
 
       return (
         <Tabs
-          size="lg"
+          size={isPartOfSet ? 'sm' : 'lg'}
           defaultValue={selectedLanguage}
           onChange={(_event, newLanguage) => {
             if (!isLanguage(newLanguage)) {
@@ -213,13 +215,21 @@ const Playground = forwardRef<PlaygroundRef, PlaygroundProps>(
     );
 
     return (
-      <div className={classNames('not-content', styles.className)}>
+      <div
+        className={classNames(
+          'not-content',
+          styles.className,
+          isPartOfSet ? styles.noMargin : undefined
+        )}
+      >
         <JoyThemeProvider>
           {getEditors()}
-          <CodeExecutor
-            state={state}
-            {...{ selectedLanguage, onResetEditors, onCodeAction }}
-          />
+          {preventRun ? null : (
+            <CodeExecutor
+              state={state}
+              {...{ selectedLanguage, onResetEditors, onCodeAction }}
+            />
+          )}
         </JoyThemeProvider>
       </div>
     );
