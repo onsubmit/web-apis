@@ -97,9 +97,17 @@ function replaceIframeHandler({
 
   iframeSrcDoc += '</body></html>';
 
-  // TODO: Fix quote handling
-  return executorValue.replace(
-    `<iframe src="${config.iframeSrc}"`,
-    `<iframe srcdoc="${iframeSrcDoc.trim()}"`
+  const temp = document.createElement('div');
+  temp.innerHTML = executorValue;
+
+  const iframe = temp.querySelector<HTMLIFrameElement>(
+    `iframe[src='${config.iframeSrc}']`
   );
+  if (!iframe) {
+    throw new Error(`Couldn't find iframe`);
+  }
+
+  iframe.src = '';
+  iframe.srcdoc = iframeSrcDoc.trim();
+  return temp.innerHTML;
 }
