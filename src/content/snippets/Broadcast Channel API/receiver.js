@@ -5,13 +5,12 @@ if (!window.BroadcastChannel) {
 
 // ___Begin visible code snippet___
 
-console.log('Receiver 1: listening for messages...');
+const list = document.querySelector('ol#receiverList');
 
 const channel = new BroadcastChannel('my-channel');
-
 channel.addEventListener('message', (event) => {
-  console.log('Receiver 1: Message received');
-  console.debug(JSON.stringify(getMessageEvent(event), null, 2));
+  const eventStr = JSON.stringify(getMessageEvent(event));
+  log(`Message received: ${eventStr}`);
 });
 
 function getMessageEvent(event) {
@@ -19,4 +18,10 @@ function getMessageEvent(event) {
     data: event.data,
     origin: event.origin,
   };
+}
+
+function log(data) {
+  const listItem = document.createElement('li');
+  listItem.textContent = data;
+  list.appendChild(listItem);
 }

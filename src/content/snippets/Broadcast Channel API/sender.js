@@ -8,17 +8,16 @@ if (!window.BroadcastChannel) {
 const channel = new BroadcastChannel('my-channel');
 console.log('Broadcast channel created.');
 
-let count = 0;
-const interval = setInterval(() => {
-  if (count++ < 30) {
-    console.log(`Sending message ${count}...`);
-    channel.postMessage({
-      message: `Message ${count}`,
-      timestamp: new Date().toUTCString(),
-    });
-  } else {
-    console.log('Stopped sending messages...');
-    clearInterval(interval);
-    channel.close();
-  }
-}, 2000);
+const div = document.getElementById('sender-example');
+const input = div.querySelector('input');
+const button = div.querySelector('button');
+
+button.addEventListener('click', (e) => {
+  e.preventDefault();
+  console.log(`Sending message: ${input.value}...`);
+  channel.postMessage({
+    message: `Message ${input.value}`,
+    timestamp: new Date().toUTCString(),
+  });
+  input.value = '';
+});

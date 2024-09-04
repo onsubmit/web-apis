@@ -2,12 +2,15 @@
 title: Broadcast Channel API
 ---
 
-import { Aside, LinkCard, TabItem, Tabs } from "@astrojs/starlight/components";
+import { LinkCard, TabItem, Tabs } from '@astrojs/starlight/components';
 import Playground from '@components/Playground';
-import Receiver1 from '@snippets/Broadcast Channel API/receiver1.js?raw';
-import Receiver2 from '@snippets/Broadcast Channel API/receiver2.js?raw';
-import Sender from '@snippets/Broadcast Channel API/sender.js?raw';
-
+import PlaygroundSet from '@components/PlaygroundSet';
+import receiver_css from '@snippets/Broadcast Channel API/receiver.css?raw';
+import receiver_html from '@snippets/Broadcast Channel API/receiver.html?raw';
+import receiver_js from '@snippets/Broadcast Channel API/receiver.js?raw';
+import sender_css from '@snippets/Broadcast Channel API/sender.css?raw';
+import sender_html from '@snippets/Broadcast Channel API/sender.html?raw';
+import sender_js from '@snippets/Broadcast Channel API/sender.js?raw';
 
 The Broadcast Channel API allows basic communication between browsing contexts and workers on the same origin.
 
@@ -19,20 +22,33 @@ By creating a `BroadcastChannel` object, you can receive any messages that are p
   target="_blank"
 />
 
-<Aside type="caution">
-  Be sure to run the code on each tab below!
-
-  The **Sender** tab sends the messages and the **Receiver** tabs receive them!
-</Aside>
-
-<Tabs>
-  <TabItem label="Sender" icon="rss">
-    <Playground client:only="react" languages={ { js: Sender } } />
-  </TabItem>
-  <TabItem label="Receiver 1">
-    <Playground client:only="react" languages={ { js: Receiver1 } } />
-  </TabItem>
-  <TabItem label="Receiver 2">
-    <Playground client:only="react" languages={ { js: Receiver2 } } />
-  </TabItem>
-</Tabs>
+<PlaygroundSet
+  client:only="react"
+  playgroundPropsArr={[
+    {
+      id: 'sender.html',
+      languages: {
+        js: sender_js,
+        html: sender_html,
+        css: sender_css,
+      },
+    },
+    {
+      id: 'receiver.html',
+      preventRun: true,
+      languages: {
+        js: receiver_js,
+        html: receiver_html,
+        css: receiver_css,
+      },
+    },
+  ]}
+  options={{
+    type: 'replaceIframe',
+    config: {
+      sourceId: 'receiver.html',
+      targetId: 'sender.html',
+      iframeSrc: 'receiver.html',
+    },
+  }}
+/>
