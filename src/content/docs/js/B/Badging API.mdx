@@ -2,7 +2,7 @@
 title: Badging API
 ---
 
-import { LinkCard } from "@astrojs/starlight/components";
+import { LinkCard } from '@astrojs/starlight/components';
 import Playground from '@components/Playground';
 import Navigator_clearAppBadge from '@snippets/Navigator.clearAppBadge().js?raw';
 import Navigator_setAppBadge from '@snippets/Navigator.setAppBadge().js?raw';
@@ -11,15 +11,11 @@ The Badging API gives web developers a method of setting a badge on a document o
 
 In a desktop browser, to see the results of the Badging API, you'll need to pin this web app to your taskbar or dock. In Edge/Chrome, you can do this from the `...` > More Tools menu.
 
-<LinkCard
-  title="Badging API - Web APIs | MDN"
-  href="https://developer.mozilla.org/en-US/docs/Web/API/Badging_API"
-  target="_blank"
-/>
-
 ## Methods
 
 ### Navigator.setAppBadge()
+
+<Playground client:only="react" languages={{ js: Navigator_setAppBadge }} />
 
 <LinkCard
   title="Navigator: setAppBadge() method | MDN"
@@ -27,9 +23,9 @@ In a desktop browser, to see the results of the Badging API, you'll need to pin 
   target="_blank"
 />
 
-<Playground client:only="react" languages={ { js: Navigator_setAppBadge} } />
-
 ### Navigator.clearAppBadge()
+
+<Playground client:only="react" languages={{ js: Navigator_clearAppBadge }} />
 
 <LinkCard
   title="Navigator: clearAppBadge() method | MDN"
@@ -37,4 +33,10 @@ In a desktop browser, to see the results of the Badging API, you'll need to pin 
   target="_blank"
 />
 
-<Playground client:only="react" languages={ { js: Navigator_clearAppBadge} } />
+## References
+
+<LinkCard
+  title="Badging API - Web APIs | MDN"
+  href="https://developer.mozilla.org/en-US/docs/Web/API/Badging_API"
+  target="_blank"
+/>

@@ -2,21 +2,17 @@
 title: Beacon API
 ---
 
-import { LinkCard } from "@astrojs/starlight/components";
+import { LinkCard } from '@astrojs/starlight/components';
 import Playground from '@components/Playground';
 import Navigator_sendBeacon from '@snippets/Navigator.sendBeacon().js?raw';
 
 The Beacon API is used to send an asynchronous and non-blocking request to a web server. The request does not expect a response.
 
-<LinkCard
-  title="Beacon API - Web APIs | MDN"
-  href="https://developer.mozilla.org/en-US/docs/Web/API/Beacon_API"
-  target="_blank"
-/>
-
 ## Methods
 
 ### Navigator.sendBeacon()
+
+<Playground client:only="react" languages={{ js: Navigator_sendBeacon }} />
 
 <LinkCard
   title="Navigator: sendBeacon() method | MDN"
@@ -24,4 +20,10 @@ The Beacon API is used to send an asynchronous and non-blocking request to a web
   target="_blank"
 />
 
-<Playground client:only="react" languages={ { js: Navigator_sendBeacon} } />
+## References
+
+<LinkCard
+  title="Beacon API - Web APIs | MDN"
+  href="https://developer.mozilla.org/en-US/docs/Web/API/Beacon_API"
+  target="_blank"
+/>

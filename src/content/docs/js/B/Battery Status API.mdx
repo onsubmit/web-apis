@@ -2,7 +2,7 @@
 title: Battery Status API
 ---
 
-import { LinkCard } from "@astrojs/starlight/components";
+import { LinkCard } from '@astrojs/starlight/components';
 import Playground from '@components/Playground';
 import Battery_Status_API from '@snippets/Battery Status API.js?raw';
 
@@ -10,22 +10,12 @@ The Battery Status API provides information about the system's battery charge le
 
 This can be used to adjust your app's resource usage to reduce battery drain when the battery is low, or to save changes before the battery runs out in order to prevent data loss.
 
+<Playground client:only="react" languages={{ js: Battery_Status_API }} />
+
+## References
+
 <LinkCard
   title="Battery Status API - Web APIs | MDN"
   href="https://developer.mozilla.org/en-US/docs/Web/API/Battery_Status_API"
   target="_blank"
 />
-
-<Playground client:only="react" languages={ { js: Battery_Status_API} } />
-
-## Methods
-
-### Navigator.getBattery()
-
-<LinkCard
-  title="Navigator: getBattery() method | MDN"
-  href="https://developer.mozilla.org/en-US/docs/Web/API/Navigator/getBattery"
-  target="_blank"
-/>
-
-See [Overview](#_top).
