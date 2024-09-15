@@ -1,7 +1,5 @@
 if (!('documentPictureInPicture' in window)) {
-  console.error(
-    'Document Picture-in-Picture API not supported in this browser.'
-  );
+  console.error('Document Picture-in-Picture API not supported in this browser.');
   return;
 }
 
