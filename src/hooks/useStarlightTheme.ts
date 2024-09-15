@@ -2,9 +2,7 @@ import { useEffect } from 'react';
 
 export type Theme = 'dark' | 'light';
 
-export default function useStarlightTheme(
-  onThemeChange: (newTheme: Theme) => void
-) {
+export default function useStarlightTheme(onThemeChange: (newTheme: Theme) => void) {
   return useEffect(() => {
     const handleThemeChange = (e: Event) => {
       if (e.currentTarget instanceof HTMLSelectElement) {
@@ -13,22 +11,18 @@ export default function useStarlightTheme(
     };
 
     const themeChangeAbortController = new AbortController();
-    document
-      .querySelectorAll<HTMLSelectElement>('starlight-theme-select select')
-      .forEach((select) => {
-        select.addEventListener('change', handleThemeChange, {
-          signal: themeChangeAbortController.signal,
-        });
+    document.querySelectorAll<HTMLSelectElement>('starlight-theme-select select').forEach((select) => {
+      select.addEventListener('change', handleThemeChange, {
+        signal: themeChangeAbortController.signal,
       });
+    });
 
     return () => themeChangeAbortController.abort();
   }, [onThemeChange]);
 }
 
 export function getInitialTheme(): Theme {
-  const storedTheme =
-    document.documentElement.dataset.theme ||
-    localStorage?.getItem('starlight-theme');
+  const storedTheme = document.documentElement.dataset.theme || localStorage?.getItem('starlight-theme');
 
   return parseTheme(storedTheme);
 }

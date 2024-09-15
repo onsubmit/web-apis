@@ -22,13 +22,7 @@ type OptionHandlerArgs = {
   executorValue: string;
 };
 
-export function handleOptions({
-  options,
-  playgroundId,
-  playgroundRefs,
-  language,
-  executorValue,
-}: OptionHandlerArgs) {
+export function handleOptions({ options, playgroundId, playgroundRefs, language, executorValue }: OptionHandlerArgs) {
   return optionHandlers[options.type]({
     options,
     playgroundId,
@@ -38,10 +32,7 @@ export function handleOptions({
   });
 }
 
-const optionHandlers: Record<
-  PlaygroundSetOptionsType,
-  (args: OptionHandlerArgs) => string
-> = {
+const optionHandlers: Record<PlaygroundSetOptionsType, (args: OptionHandlerArgs) => string> = {
   replaceIframe: replaceIframeHandler,
 };
 
@@ -52,11 +43,7 @@ function replaceIframeHandler({
   language,
   executorValue,
 }: OptionHandlerArgs) {
-  if (
-    type !== 'replaceIframe' ||
-    language !== 'html' ||
-    playgroundId !== config.targetId
-  ) {
+  if (type !== 'replaceIframe' || language !== 'html' || playgroundId !== config.targetId) {
     return executorValue;
   }
 
@@ -100,9 +87,7 @@ function replaceIframeHandler({
   const temp = document.createElement('div');
   temp.innerHTML = executorValue;
 
-  const iframe = temp.querySelector<HTMLIFrameElement>(
-    `iframe[src='${config.iframeSrc}']`
-  );
+  const iframe = temp.querySelector<HTMLIFrameElement>(`iframe[src='${config.iframeSrc}']`);
   if (!iframe) {
     throw new Error(`Couldn't find iframe`);
   }

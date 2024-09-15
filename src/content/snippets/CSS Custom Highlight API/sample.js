@@ -19,9 +19,7 @@ query.addEventListener('input', () => {
   const ranges = allTextNodes
     .map((node) => ({ node, text: node.textContent.toLowerCase() }))
     .flatMap(({ node, text }) =>
-      getMatchIndices(text, searchValue).map((index) =>
-        createRange(node, index, searchValue.length)
-      )
+      getMatchIndices(text, searchValue).map((index) => createRange(node, index, searchValue.length))
     );
 
   // eslint-disable-next-line no-undef

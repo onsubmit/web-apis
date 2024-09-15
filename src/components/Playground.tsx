@@ -5,18 +5,8 @@ import Tabs from '@mui/joy/Tabs';
 import type { ReactCodeMirrorRef } from '@uiw/react-codemirror';
 import classNames from 'classnames';
 import { produce } from 'immer';
-import {
-  forwardRef,
-  useCallback,
-  useImperativeHandle,
-  useMemo,
-  useRef,
-  useState,
-} from 'react';
-import useStarlightTheme, {
-  getInitialTheme,
-  type Theme,
-} from 'src/hooks/useStarlightTheme';
+import { forwardRef, useCallback, useImperativeHandle, useMemo, useRef, useState } from 'react';
+import useStarlightTheme, { getInitialTheme, type Theme } from 'src/hooks/useStarlightTheme';
 import { getDocument, getSnippet } from 'src/utils/documentGenerator';
 import { isLanguage, type Language } from 'src/utils/language';
 
@@ -26,11 +16,7 @@ import { CodeExecutor } from './CodeExecutor';
 import JoyThemeProvider from './JoyThemeProvider';
 import styles from './Playground.module.css';
 
-type OnBeforeRunCode = (
-  playgroundId: string,
-  language: Language,
-  executorValue: string
-) => string;
+type OnBeforeRunCode = (playgroundId: string, language: Language, executorValue: string) => string;
 
 export type PlaygroundProps = {
   id: string;
@@ -65,9 +51,7 @@ const Playground = forwardRef<PlaygroundRef, PlaygroundProps>(
       () => getInitialLanguageState(id, languages, onBeforeRunCode),
       [id, languages, onBeforeRunCode]
     );
-    const [selectedLanguage, setSelectedLanguage] = useState<Language>(
-      getFirstLanguage(languages)
-    );
+    const [selectedLanguage, setSelectedLanguage] = useState<Language>(getFirstLanguage(languages));
 
     const editorRefs = {
       js: useRef<ReactCodeMirrorRef>(null),
@@ -94,13 +78,10 @@ const Playground = forwardRef<PlaygroundRef, PlaygroundProps>(
       setState(
         produce((s) => {
           for (const language of languageNames) {
-            const executorValue =
-              s[language].header + s[language].initialEditorValue;
+            const executorValue = s[language].header + s[language].initialEditorValue;
 
             s[language].getExecutorValue = () => {
-              return onBeforeRunCode
-                ? onBeforeRunCode(id, language, executorValue)
-                : executorValue;
+              return onBeforeRunCode ? onBeforeRunCode(id, language, executorValue) : executorValue;
             };
           }
         })
@@ -118,29 +99,20 @@ const Playground = forwardRef<PlaygroundRef, PlaygroundProps>(
             const executorValue = (s[language].header + newEditorScript).trim();
 
             s[language].getExecutorValue = () =>
-              onBeforeRunCode
-                ? onBeforeRunCode(id, language, executorValue)
-                : executorValue;
+              onBeforeRunCode ? onBeforeRunCode(id, language, executorValue) : executorValue;
           })
         );
       },
       [id, onBeforeRunCode]
     );
 
-    const getEditorOnChangeCallback =
-      (language: Language) => (newValue: string) =>
-        onEditorChange(language, newValue);
+    const getEditorOnChangeCallback = (language: Language) => (newValue: string) => onEditorChange(language, newValue);
 
     function onCodeAction(action: CodeAction, content: CodeActionContent) {
       switch (action) {
         case 'Copy': {
-          const code =
-            content === 'Snippet'
-              ? getSnippet(selectedLanguage, state)
-              : getDocument(state);
-          navigator.clipboard
-            .writeText(code.trim())
-            .catch((error) => console.error(error));
+          const code = content === 'Snippet' ? getSnippet(selectedLanguage, state) : getDocument(state);
+          navigator.clipboard.writeText(code.trim()).catch((error) => console.error(error));
         }
       }
     }
@@ -215,20 +187,10 @@ const Playground = forwardRef<PlaygroundRef, PlaygroundProps>(
     );
 
     return (
-      <div
-        className={classNames(
-          'not-content',
-          styles.className,
-          isPartOfSet ? styles.noMargin : undefined
-        )}
-      >
+      <div className={classNames('not-content', styles.className, isPartOfSet ? styles.noMargin : undefined)}>
         <JoyThemeProvider>
           {getEditors()}
-          <CodeExecutor
-            state={state}
-            preventRun={preventRun}
-            {...{ selectedLanguage, onResetEditors, onCodeAction }}
-          />
+          <CodeExecutor state={state} preventRun={preventRun} {...{ selectedLanguage, onResetEditors, onCodeAction }} />
         </JoyThemeProvider>
       </div>
     );
@@ -250,38 +212,32 @@ function getInitialLanguageState(
   languages: PlaygroundProps['languages'],
   onBeforeRunCode?: OnBeforeRunCode
 ): LanguageState {
-  return (
-    Object.entries(languages) as Array<[Language, string]>
-  ).reduce<LanguageState>((accumulator, [language, script]) => {
-    if (language === 'js') {
-      // Remove triple-slash comments
-      script = script.replaceAll(/^\s*\/{3}(.+?)(\r?\n)/gm, '');
+  return (Object.entries(languages) as Array<[Language, string]>).reduce<LanguageState>(
+    (accumulator, [language, script]) => {
+      if (language === 'js') {
+        // Remove triple-slash comments
+        script = script.replaceAll(/^\s*\/{3}(.+?)(\r?\n)/gm, '');
 
-      // Remove eslint-ignore comments
-      script = script.replaceAll(
-        /^\s*\/\/ eslint-disable-next-line(.+?)(\r?\n)/gm,
-        ''
-      );
+        // Remove eslint-ignore comments
+        script = script.replaceAll(/^\s*\/\/ eslint-disable-next-line(.+?)(\r?\n)/gm, '');
 
-      script = script.replaceAll(/^\/\* eslint-disable(.+?)\*\/(\r?\n)/gm, '');
-    }
+        script = script.replaceAll(/^\/\* eslint-disable(.+?)\*\/(\r?\n)/gm, '');
+      }
 
-    const split = script.split('// ___Begin visible code snippet___');
-    const header = split.length === 2 ? (split[0]?.trim() ?? '') : '';
-    const initialEditorValue =
-      (split.length === 2 ? split[1] : split[0])?.trim() ?? '';
-    const executorValue = `${header}\n\n${initialEditorValue}`;
+      const split = script.split('// ___Begin visible code snippet___');
+      const header = split.length === 2 ? (split[0]?.trim() ?? '') : '';
+      const initialEditorValue = (split.length === 2 ? split[1] : split[0])?.trim() ?? '';
+      const executorValue = `${header}\n\n${initialEditorValue}`;
 
-    accumulator[language] = {
-      header,
-      initialEditorValue,
-      getExecutorValue: () =>
-        onBeforeRunCode
-          ? onBeforeRunCode(id, language, executorValue)
-          : executorValue,
-    };
-    return accumulator;
-  }, {} as LanguageState);
+      accumulator[language] = {
+        header,
+        initialEditorValue,
+        getExecutorValue: () => (onBeforeRunCode ? onBeforeRunCode(id, language, executorValue) : executorValue),
+      };
+      return accumulator;
+    },
+    {} as LanguageState
+  );
 }
 
 Playground.displayName = 'Playground';

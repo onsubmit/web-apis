@@ -36,10 +36,7 @@ ${indentString(getSnippet('css', state).trim(), 4)}
   }
 
   if (state.html) {
-    document = document.replace(
-      '{USER_HTML}',
-      indentString(getSnippet('html', state).trim(), 4)
-    );
+    document = document.replace('{USER_HTML}', indentString(getSnippet('html', state).trim(), 4));
   } else {
     document = document.replace(/[{]USER_HTML[}](\r?\n)/, '');
   }

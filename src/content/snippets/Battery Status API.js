@@ -43,9 +43,7 @@ function updateChargingInfo(ev) {
   } else if (battery.chargingTime === Infinity) {
     console.log('Battery is discharging and will never fully charge.');
   } else {
-    console.log(
-      `Battery will fully charge in ${battery.chargingTime} seconds.`
-    );
+    console.log(`Battery will fully charge in ${battery.chargingTime} seconds.`);
   }
 }
 
@@ -56,9 +54,7 @@ function updateDischargingInfo(ev) {
     console.log('Battery is charging and will never fully discharge.');
     console.warn('Browser may have failed to report the battery status.');
   } else {
-    console.log(
-      `Battery will fully discharge in ${battery.dischargingTime} seconds.`
-    );
+    console.log(`Battery will fully discharge in ${battery.dischargingTime} seconds.`);
   }
 }
 

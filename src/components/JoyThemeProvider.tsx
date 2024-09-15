@@ -2,10 +2,7 @@ import '@fontsource/inter';
 
 import { CssVarsProvider, useColorScheme } from '@mui/joy/styles';
 import { type ReactNode, useEffect } from 'react';
-import useStarlightTheme, {
-  getInitialTheme,
-  type Theme,
-} from 'src/hooks/useStarlightTheme';
+import useStarlightTheme, { getInitialTheme, type Theme } from 'src/hooks/useStarlightTheme';
 
 type JoyThemeProviderProps = {
   children: ReactNode;

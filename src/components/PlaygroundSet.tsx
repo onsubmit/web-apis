@@ -5,32 +5,19 @@ import Tabs from '@mui/joy/Tabs';
 import classNames from 'classnames';
 import type { Language } from 'src/utils/language';
 
-import Playground, {
-  type PlaygroundProps,
-  type PlaygroundRef,
-} from './Playground';
+import Playground, { type PlaygroundProps, type PlaygroundRef } from './Playground';
 import styles from './PlaygroundSet.module.css';
-import {
-  handleOptions,
-  type PlaygroundSetOptions,
-} from './PlaygroundSetOptions';
+import { handleOptions, type PlaygroundSetOptions } from './PlaygroundSetOptions';
 
 type PlaygroundSetProps = {
   playgroundPropsArr: Array<PlaygroundProps>;
   options?: PlaygroundSetOptions;
 };
 
-export default function PlaygroundSet({
-  playgroundPropsArr,
-  options,
-}: PlaygroundSetProps) {
+export default function PlaygroundSet({ playgroundPropsArr, options }: PlaygroundSetProps) {
   const playgroundRefs: Record<string, PlaygroundRef | null> = {};
 
-  function onBeforeRunCode(
-    playgroundId: string,
-    language: Language,
-    executorValue: string
-  ): string {
+  function onBeforeRunCode(playgroundId: string, language: Language, executorValue: string): string {
     if (!options) {
       return executorValue;
     }

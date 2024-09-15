@@ -9,15 +9,10 @@ import Button from '@mui/joy/Button';
 import IconButton from '@mui/joy/IconButton';
 import classNames from 'classnames';
 import { useId, useRef, useState } from 'react';
-import useStarlightTheme, {
-  getInitialTheme,
-  type Theme,
-} from 'src/hooks/useStarlightTheme';
+import useStarlightTheme, { getInitialTheme, type Theme } from 'src/hooks/useStarlightTheme';
 import type { Language } from 'src/utils/language';
 
-import CodeActionSplitButton, {
-  type CodeActionFn,
-} from './CodeActionSplitButton';
+import CodeActionSplitButton, { type CodeActionFn } from './CodeActionSplitButton';
 import styles from './CodeExecutor.module.css';
 import type { LanguageState } from './Playground';
 
@@ -37,10 +32,7 @@ type CodeExecutorProps = {
 
 const supportedConsoleMethods = ['log', 'warn', 'error', 'debug'] as const;
 type SupportedConsoleMethod = (typeof supportedConsoleMethods)[number];
-const consoleMethodClassMap: Record<
-  SupportedConsoleMethod,
-  string | undefined
-> = {
+const consoleMethodClassMap: Record<SupportedConsoleMethod, string | undefined> = {
   log: '',
   warn: styles.warn,
   error: styles.error,
@@ -108,12 +100,7 @@ function CodeExecutor({
   }
 
   return (
-    <div
-      className={classNames(
-        styles.className,
-        theme === 'dark' ? styles.dark : styles.light
-      )}
-    >
+    <div className={classNames(styles.className, theme === 'dark' ? styles.dark : styles.light)}>
       <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
         <Box>
           {preventRun ? null : (
@@ -129,13 +116,7 @@ function CodeExecutor({
             actionIcon={<ContentCopyIcon />}
             snippetIcon={languageIconMap[selectedLanguage]}
           />
-          <IconButton
-            onClick={resetCode}
-            variant="soft"
-            color="warning"
-            aria-label="Reset code"
-            title="Reset"
-          >
+          <IconButton onClick={resetCode} variant="soft" color="warning" aria-label="Reset code" title="Reset">
             <ReplayIcon />
           </IconButton>
         </Box>
@@ -151,10 +132,7 @@ function replaceConsoleMethods(script: string) {
     return `_console.${method}(${message})`;
   }
 
-  const regex = new RegExp(
-    `console.(?<METHOD>${supportedConsoleMethodsRegExStr})[(](?<LOG>.+?)[)]`,
-    'g'
-  );
+  const regex = new RegExp(`console.(?<METHOD>${supportedConsoleMethodsRegExStr})[(](?<LOG>.+?)[)]`, 'g');
   return script.replaceAll(regex, replacer);
 }
 
@@ -175,8 +153,7 @@ function executeScript(script: string, listId: string) {
 
 function getExecutableScript(script: string, listId: string): string {
   const consoleOverrides = supportedConsoleMethods.map(
-    (m) =>
-      `    ${m}: (message) => _console._log("${m}", message, "${consoleMethodClassMap[m]}")`
+    (m) => `    ${m}: (message) => _console._log("${m}", message, "${consoleMethodClassMap[m]}")`
   );
 
   return `

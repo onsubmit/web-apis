@@ -15,39 +15,33 @@ type CodeEditorProps = {
   onChange: (newValue: string) => void;
 };
 
-const CodeEditor = forwardRef<ReactCodeMirrorRef, CodeEditorProps>(
-  ({ script, theme, language, onChange }, ref) => {
-    const editorRef = useRef<HTMLDivElement>(null);
+const CodeEditor = forwardRef<ReactCodeMirrorRef, CodeEditorProps>(({ script, theme, language, onChange }, ref) => {
+  const editorRef = useRef<HTMLDivElement>(null);
 
-    const { state, setContainer, view } = useCodeMirror({
-      container: editorRef.current,
-      theme: theme === 'light' ? vscodeLight : vscodeDark,
-      maxHeight: '600px',
-      extensions: [getLanguageExtension(language), EditorView.lineWrapping],
-      value: script.trim(),
-      onChange,
-      basicSetup: {
-        lineNumbers: false,
-        foldGutter: false,
-        highlightSelectionMatches: true,
-      },
-    });
+  const { state, setContainer, view } = useCodeMirror({
+    container: editorRef.current,
+    theme: theme === 'light' ? vscodeLight : vscodeDark,
+    maxHeight: '600px',
+    extensions: [getLanguageExtension(language), EditorView.lineWrapping],
+    value: script.trim(),
+    onChange,
+    basicSetup: {
+      lineNumbers: false,
+      foldGutter: false,
+      highlightSelectionMatches: true,
+    },
+  });
 
-    useImperativeHandle(
-      ref,
-      () => ({ editor: editorRef.current, state, view }),
-      [editorRef, state, view]
-    );
+  useImperativeHandle(ref, () => ({ editor: editorRef.current, state, view }), [editorRef, state, view]);
 
-    useEffect(() => {
-      if (editorRef.current) {
-        setContainer(editorRef.current);
-      }
-    }, [setContainer]);
+  useEffect(() => {
+    if (editorRef.current) {
+      setContainer(editorRef.current);
+    }
+  }, [setContainer]);
 
-    return <div ref={editorRef} />;
-  }
-);
+  return <div ref={editorRef} />;
+});
 
 function getLanguageExtension(language: Language): LanguageSupport {
   switch (language) {

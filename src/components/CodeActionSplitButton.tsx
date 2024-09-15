@@ -11,10 +11,7 @@ export type CodeAction = 'Copy';
 const codeActionContent = ['Snippet', 'Document'] as const;
 export type CodeActionContent = (typeof codeActionContent)[number];
 
-export type CodeActionFn = (
-  action: CodeAction,
-  code: CodeActionContent
-) => void;
+export type CodeActionFn = (action: CodeAction, code: CodeActionContent) => void;
 type CodeActionSplitButtonProps = {
   actionIcon: React.ReactNode;
   snippetIcon: React.ReactNode;
@@ -52,8 +49,7 @@ export default function CodeActionSplitButton({
                 onCodeAction(action, c)
             )(content)}
           >
-            <ListItemDecorator>{contentIconMap[content]}</ListItemDecorator>{' '}
-            {content}
+            <ListItemDecorator>{contentIconMap[content]}</ListItemDecorator> {content}
           </MenuItem>
         ))}
       </Menu>
