@@ -9,5 +9,10 @@
 
 label,
 input {
-  display: inline-block;
+  display: block;
+}
+
+input {
+  width: 100%;
+  margin-bottom: 1rem;
 }
