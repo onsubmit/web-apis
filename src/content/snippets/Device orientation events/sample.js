@@ -12,6 +12,7 @@ if (typeof DeviceMotionEvent.requestPermission === 'function') {
     DeviceMotionEvent.requestPermission().then((permissionState) => {
       if (permissionState === 'granted') {
         addEventListeners();
+        requestButton.style.display = 'none';
       } else {
         console.warn('Permission rejected');
       }
@@ -29,22 +30,30 @@ function addEventListeners() {
 function handleMotionEvent(event) {
   {
     const { x, y, z } = event.acceleration;
-    console.log(`acceleration: ${JSON.stringify({ x, y, z })}`);
+    accelerationX.value = x;
+    accelerationY.value = y;
+    accelerationZ.value = z;
   }
 
   {
     const { x, y, z } = event.accelerationIncludingGravity;
-    console.log(`accelerationIncludingGravity: ${JSON.stringify({ x, y, z })}`);
+    accelerationIncludingGravityX.value = x;
+    accelerationIncludingGravityY.value = y;
+    accelerationIncludingGravityZ.value = z;
   }
 
   const { interval, rotationRate } = event;
   const { alpha, beta, gamma } = rotationRate;
-  console.log(`rotationRate: ${JSON.stringify({ alpha, beta, gamma })}`);
-  console.log(`interval: ${interval}`);
+  rotationAlpha.value = alpha;
+  rotationBeta.value = beta;
+  rotationGamma.value = gamma;
+  intervalInMs.value = interval;
 }
 
 function handleOrientationEvent(event) {
   const { absolute, alpha, beta, gamma } = event;
-  console.log(`orientation: ${JSON.stringify({ alpha, beta, gamma })}`);
-  console.log(`absolute: ${absolute}`);
+  orientationAlpha.value = alpha;
+  orientationBeta.value = beta;
+  orientationGamma.value = gamma;
+  isAbsolute.value = absolute;
 }
