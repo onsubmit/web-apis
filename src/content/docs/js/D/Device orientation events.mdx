@@ -1,0 +1,28 @@
+---
+title: Device orientation events
+---
+
+import { LinkCard } from '@astrojs/starlight/components';
+import Playground from '@components/Playground';
+import Device_Orientation_Events_js from '@snippets/Device orientation events/sample.js?raw';
+import Device_Orientation_Events_html from '@snippets/Device orientation events/sample.html?raw';
+import Device_Orientation_Events_css from '@snippets/Device orientation events/sample.css?raw';
+
+Device orientation events are events that allow you to detect a device's physical orientation, as well as allowing you to detect the device's motion.
+
+<Playground
+  client:only="react"
+  languages={{
+    js: Device_Orientation_Events_js,
+    html: Device_Orientation_Events_html,
+    css: Device_Orientation_Events_css,
+  }}
+/>
+
+## References
+
+<LinkCard
+  title="Device orientation events | MDN"
+  href="https://developer.mozilla.org/en-US/docs/Web/API/Device_orientation_events"
+  target="_blank"
+/>
