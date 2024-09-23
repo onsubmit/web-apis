@@ -1,0 +1,23 @@
+---
+title: Device Memory API
+---
+
+import { LinkCard } from '@astrojs/starlight/components';
+import Playground from '@components/Playground';
+import Device_Memory_API from '@snippets/Device Memory API.js?raw';
+
+The Device Memory API helps developers determine roughly how much RAM is available on the client device.
+
+The `deviceMemory` read-only property of the `Navigator` interface returns the approximate amount of device memory in gigabytes.
+
+The reported value is imprecise to curtail fingerprinting. It's approximated by rounding down to the nearest power of 2, then dividing that number by 1024. It is then clamped within lower and upper bounds.
+
+<Playground client:only="react" languages={{ js: Device_Memory_API }} />
+
+## References
+
+<LinkCard
+  title="Device Memory API | MDN"
+  href="https://developer.mozilla.org/en-US/docs/Web/API/Device_Memory_API"
+  target="_blank"
+/>
