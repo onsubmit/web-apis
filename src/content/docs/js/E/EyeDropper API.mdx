@@ -1,0 +1,28 @@
+---
+title: EyeDropper API
+---
+
+import { LinkCard } from '@astrojs/starlight/components';
+import Playground from '@components/Playground';
+import EyeDropper_API_css from '@snippets/EyeDropper API/sample.css?raw';
+import EyeDropper_API_html from '@snippets/EyeDropper API/sample.html?raw';
+import EyeDropper_API_js from '@snippets/EyeDropper API/sample.js?raw';
+
+The EyeDropper API provides a mechanism for creating an eyedropper tool. Using this tool, users can sample colors from their screens, including outside of the browser window.
+
+<Playground
+  client:only="react"
+  languages={{
+    js: EyeDropper_API_js,
+    html: EyeDropper_API_html,
+    css: EyeDropper_API_css,
+  }}
+/>
+
+## References
+
+<LinkCard
+  title="EyeDropper API - Web APIs | MDN"
+  href="https://developer.mozilla.org/en-US/docs/Web/API/EyeDropper_API"
+  target="_blank"
+/>

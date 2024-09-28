@@ -1,0 +1,23 @@
+div {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+div > * {
+  flex: 1 1 30%;
+}
+
+button {
+  white-space: nowrap;
+}
+
+button,
+input {
+  height: 3rem;
+}
+
+input[type='text'] {
+  padding: 1rem;
+}
