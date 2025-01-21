@@ -1,0 +1,41 @@
+---
+title: Geolocation API
+---
+import { LinkCard } from '@astrojs/starlight/components';
+import Playground from '@components/Playground';
+import Geolocation_getCurrentPosition from '@snippets/Geolocation API/Geolocation.getCurrentPosition().js?raw'
+import Geolocation_watchPosition from '@snippets/Geolocation API/Geolocation.watchPosition().js?raw'
+import Geolocation_watchPosition_html from '@snippets/Geolocation API/sample.html?raw'
+
+The Geolocation API allows the user to provide their location to web applications if they so desire. For privacy reasons, the user is asked for permission to report location information.
+
+Turn on location services in systems settings.
+
+## Methods
+
+### navigator.geolocation.getCurrentPosition()
+
+<Playground
+  client:only="react"
+  languages={{
+    js: Geolocation_getCurrentPosition
+  }}
+/>
+
+### navigator.geolocation.watchPosition()
+
+<Playground
+  client:only="react"
+  languages={{
+    js: Geolocation_watchPosition,
+    html: Geolocation_watchPosition_html
+  }}
+/>
+
+## References
+
+<LinkCard
+  title="Geolocation API - Web APIs | MDN"
+  href="https://developer.mozilla.org/en-US/docs/Web/API/Geolocation_API"
+  target="_blank"
+/>
