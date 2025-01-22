@@ -22,7 +22,7 @@ const CodeEditor = forwardRef<ReactCodeMirrorRef, CodeEditorProps>(({ script, th
     container: editorRef.current,
     theme: theme === 'light' ? vscodeLight : vscodeDark,
     maxHeight: '600px',
-    extensions: [getLanguageExtension(language), EditorView.lineWrapping],
+    extensions: [getLanguageExtension(language), EditorView.lineWrapping, EditorView.editable.of(false)],
     value: script.trim(),
     onChange,
     basicSetup: {
